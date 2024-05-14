@@ -7,25 +7,24 @@
 
 ## Introducción y propuesta
 
-Este proyecto es una práctica de la asignatura de Inteligencia Artificial para Videojuegos del Grado en Desarrollo de Videojuegos de la UCM, cuyo enunciado original se puede encontrar en el siguiente enlace: [Robot a la Fuga](https://narratech.com/es/inteligencia-artificial-para-videojuegos/decision/robot-a-la-fuga/).
+Este proyecto se presenta como una práctica final para la asignatura de Inteligencia Artificial para Videojuegos del Grado en Desarrollo de Videojuegos de la UCM.
 
-La práctica basa su planteamiento alrededor del clásico relato de ciencia ficción "Pequeño Robot Perdido" publicado en 1947 por Isaac Asimov. En este texto nos encontramos con _Néstor_, uno de los muchos robots fabricado en un complejo militar. A pesar de ser físicamente idéntico a los demás robots de su modelo, él tiene una diferencia: han modificado una de sus leyes de la robótica y, después de verse ofendido por uno de los investigadores, decide escapar del complejo lo más rápido posible.
+La idea de la práctica es simular el comportamiento de varios personajes no jugadores en una aldea. Cada _PNJ_ ejecutará una serie de rutinas a lo largo del día: por la mañana hará el trabajo o tarea que tenga asignado, una vez terminada, tendrá el resto del día para dedicarse a sus tareas personales o de ocio y, al llegar la noche, todos los _PNJ_ se van a dormir y al día siguiente repetirán su rutina. 
+Adicionalmente, queremos intentar añadir un sistema de eventos por el cual pueda ocurrir un evento prioritario en la aldea (una catástrofe u otro tipo de emergencia) que obligue a los _PNJ_ a abandonar su estado actual para poner fin a la emergencia.
 
-Deberemos programar la inteligencia artificial que permita a _Néstor_ huir del complejo militar. Para ello debemos usar Behaviour Bricks, una herramienta de Unity que permite diseñar comportamientos de entidades en un entorno. Los guardias del complejo también estarán tratadas mediante IA, solo que usando una máquina de estados finita (FSM) para su implementación y sus diferentes comportamientos.
+La práctica se hará entre dos integrantes y consiste en programar un sistema de generación de terreno aleatorio usando un ruido de Perlin y programar una máquina de estados jerárquica para el comportamiento de los _PNJ_. Sobre el terreno creado se colocarán de manera coherente los edificios que componen la aldea y los _PNJ_, los cuales podrán navegar por los entornos generados para completar sus tareas personales. Los _PNJ_ serán omniscientes: cada personaje ya conocerá de antemano la disposición de la aldea y la posición de sus puntos de interés por lo que no necesitarán de un sistema de percepción para guiarse o tomar decisiones.
 
-Además, deberemos abordar el problema teniendo en cuenta que _Néstor_ no conozca el mapa del complejo ni la ruta más rápida y segura para salir, si no que debe ir viajando de una habitación a otra recabando información para tomar decisiones en función de la misma.
+Cada alumno se centrará en uno de los dos pilares fundamentales de la práctica: generación aleatoria de la aldea y programación de la máquina de estados jerárquica y rutinas de los _PNJ_.
 
 ## Planteamiento del problema
 
-Como se ha mencionado, deberemos desarrollar los comportamientos de dos tipos de entidades (_Néstor_ y _Guardias_) desde dos enfoques diferentes (Behaviour Trees y FTS) para dar con la solución a esta práctica.
+El trabajo se ha dividido de la siguiente manera:
 
-Así, hemos dividido el trabajo requerido de la siguiente forma:
-
-- Implementación de Zoom mediante input de teclado - Realizado por un integrante [***A***]
-- Impedir que los guardias te persigan al salir de la sala donde tienen su base - Realizado por un integrante [***B***]
-- Implementación del comportamiento actual de los _Guardias_ a través de máquinas de estado de los enemigos - Realizado por una pareja de integrantes del grupo [***C***]
-- Desarrollo de una IA a través de Behaviour Trees capaz de sacar a _Néstor_ del laberinto teniendo en cuenta que conoce la información del mapa - Realizado por una pareja [***D***]
-- Realización de cambios al mapa y al diseño de la IA de _Néstor_ para poder adaptarse de forma genérica a los diferentes mapas - Realizado por la misma pareja que haya realizado la IA de _Néstor_ [***E***]
+- Generación aleatoria del terreno usando el ruido de Perlin - Realizado por el estudiante A [***A***]
+- Colocación de manera coherente de los edificios y puntos de interés de la aldea sobre el terreno generado - Realizado por el estudiante A [***B***]
+- Implementación del comportamiento de los _PNJ_ a través de máquinas de estado jerárquicas - Realizado por el estudiante B [***C***]
+- Programación de las rutinas de cada personaje pudiendo ser interrumpidas por eventos prioritarios - Realizado por el estudiante B [***D***]
+- Implementación de eventos prioritarios o emergencias en la simulación - Realizado por los 2 estudiantes [***E***]
 
 ## Instalación y uso
 
@@ -298,8 +297,6 @@ Asumiendo que cada punto equivale a 30 minutos:
 
 ## Ampliaciones
 
-Hemos conseguido hacer todo lo obligatorio de la práctica, no obstante, no hemos realizado ninguna ampliación.
-
 ## Pruebas y métricas
 
 Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo el contenido implementado se pueden hacer las siguientes pruebas en la escena _Test_ _Level_ y posteriormente en la escena _Level_ _1_:
@@ -312,24 +309,12 @@ Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo 
 
 ## Conclusiones
 
-Se puede probar la práctica en el directorio Build, lanzando el ejecutable "Liquid Snake.exe".
-Todo lo propuesto ha sido llevado a cabo. Aun así, hemos tenido un problema, ya que las animaciones del jugador no funcionan correctamente en la _build_, pero en el editor de _Unity_ si.
-
-
 ## Documental con las pruebas y características
 
-https://youtu.be/wEc0SvyqwH8
-
 ## Licencia
-
-Alejandro Massó Martínez, Roi Quintas Diz, Miguel Ramírez Castrillo y David Rivera Martínez, autores de la documentación, código y recursos de este trabajo, concedemos permiso permanente a los profesores de la Facultad de Informática de la Universidad Complutense de Madrid para utilizar nuestro material, con sus comentarios y evaluaciones, con fines educativos o de investigación; ya sea para obtener datos agregados de forma anónima como para utilizarlo total o parcialmente reconociendo expresamente nuestra autoría.
-
-Una vez superada con éxito la asignatura se prevee publicar todo en abierto (la documentación con licencia Creative Commons Attribution 4.0 International (CC BY 4.0) y el código con licencia GNU Lesser General Public License 3.0).
 
 ## Referencias
 
 Los recursos de terceros utilizados son de uso público.
 
 - _AI for Games_, Ian Millington.
-- [Unity 2018 Artificial Intelligence Cookbook, Second Edition](https://github.com/PacktPublishing/Unity-2018-Artificial-Intelligence-Cookbook-Second-Edition)
-- [Unity Artificial Intelligence Programming, 5th Edition](https://github.com/PacktPublishing/Unity-Artificial-Intelligence-Programming-Fifth-Edition)
