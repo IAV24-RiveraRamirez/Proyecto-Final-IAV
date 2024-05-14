@@ -168,59 +168,7 @@ class PerlinOctave:
 
 ```
 
-### Enemigos
-Para el tratamiento de los enemigos se ha utlizado una _Máquina de Estados Finita_ (FSM), particularmente una FSM que usa _Herencia_ para definir los diferentes estados y transiciones entre los mismos. El pseudocódigo de las diferentes clases es el siguiente:
 
-- **Máquina de Estados Finita por Herencia - (HSFM)**, que gestiona los diferentes estados y transiciones
-
-```
-class HFSM:
-    #Es una clase que permite estar en un único estado a la vez
-    #Para más información sobre la clase estado, mirar más abajo
-    current : State
-
-    gameObject : GameObject
-    blackboard : Blackboard
-
-    fsmStructure : Dictionary<State, Transition[]>
-
-    function SetContext(object : GameObject):
-        gameObject = object
-
-    function StartMachine(initial : State):
-        current = initial
-        current.Enter()
-
-        foreach(Transition t in fsmStructure[current]):
-            t.Enter()
-        
-
-    function Update(dt : float):
-        # Actualiza el estado actual
-        current.Update(dt)
-        #Comprueba las transiciones del estado actual y cambia de estado en caso de que se cumpla alguna
-        bool changeState = false;
-        foreach(Transition t in fsmStructure[current]):
-            changeState = ChangeState(t)
-
-    function ChangeState(t : Transition):
-        changeState : bool = t.Check()
-        if(changeState):
-            t.Exit()
-            current.Exit()
-            current = t.NextState()
-            current.Enter()
-            foreach(Transition t in fsmStructure[current]):
-                t.Enter()
-        return changeState
-
-    function AddState(State s, Transition[] transitions):
-        s.Init(gameObject, this)
-        foreach(Transition t in transitions):
-                t.Init(gameObject, this)
-        fsmStructure.Add(s. transitions)
-
-```
 ## Producción
 
 Asumiendo que cada punto equivale a 30 minutos:
