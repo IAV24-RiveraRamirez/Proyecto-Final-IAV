@@ -290,12 +290,20 @@ Asumiendo que cada punto equivale a 30 minutos:
 
 | Estado | Tarea                                        | Puntos estimados | Puntos finales |   Fecha    |
 | :----: | :------------------------------------------- | :--------------: | :------------: | :--------: |
-|  Done  | Planificación inicial: Repartición de tareas |        1         |       1        | 11-04-2024 |
-|  Done  | Zoom Cámara                                  |        1         |       1        | 11-04-2024 |
-|  Done   | Máquina estados Enemigos                     |        10        |       14        | 27-04-2024 |
-|  Done   | Comportamientos del Jugador                  |        10        |       18        | 28-04-2024 |
+|   -    | Generación de terreno mediante Ruido Perlin  |        20        |       -        | ---------- |
+|   -    | Colocación de Aldea en terreno               |        30        |       -        | ---------- |
+|   -    | Comportamiento básico de NPCs                |        33        |       -        | ---------- |
+
+[Link](https://github.com/orgs/IAV24-RiveraRamirez/projects/1/views/1) al proyecto de GitHub con información más detallada y ampliada
 
 ## Ampliaciones
+
+En caso de disponer del tiempo suficiente, nos gustaría poder implementar las siguientes ampliaciones al proyecto, para dejar una experiencia más cerrada, en la que se explora más de un tipo de comportamiento:
+
+- **Especializaciones de NPC**: Un NPC podría no tener un trabajo genérico, sino un trabajo específico que aporte algo a la aldea. Algunos ejemplos: Granjero, Herrero, Ganadero, Comerciante, etc. Esto afectaría tremendamente a la hora de generación procedural de la aldea, ya que la colocación de edificios debería poder adaptarse al número de trabajadores de cada tipo, colocando los lugares de trabajo necesarios en lugar de un lugar de trabajo genérico. También, obviamente, afectaría al comportamiento de los NPCs
+
+- **Eventos de Peligro**: Un evento de consecuencias catastróficas puede tener lugar en la aldea. Para ello, los ciudadanos dejarían de lado su ciclo de actuación convencial para desviarse y conseguir para esta amenaza. Algunos ejemplos: Incendio, Ventisca, Ataque enemigo, etc. La máquina de estados de los NPCs cambiaría drásticamente para poder reflejar el impacto de este evento en el mundo.
+
 
 ## Pruebas y métricas
 
