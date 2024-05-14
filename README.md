@@ -38,6 +38,136 @@ El proyecto de partida será un proyecto vacío.
 
 ## Diseño de la solución
 
+### Generación procedural de contenido
+Para la generación procedural de contenido usaremos un mapa de ruido de Perlin con el que luego modificaremos el terreno. 
+
+- **Clase _Perlin Noise_**, que se encarga de asignarle un ruido de perlin a una textura a partir de unos parámetros
+
+```
+class PerinNoise:
+    #Tamaño de la textura que queremos crear
+    width : int
+    height : int
+
+    #Escala de la textura 
+    scale : float
+
+    #Desplazamiento de la textura, estos parámetros podrían usarse como semilla de generación
+    offsetX : float
+    offsetY : float
+
+    #Componente Renderer de Unity
+    renderer : Renderer
+
+    fuction Start():
+        #Esto se podría hacer para que la generación fuese diferente en cada ejecución
+        #Se puede quitar para hacer que la generación sea siempre la misma dados los offset
+        offsetX = Random(0, 1000)
+        offsetY = Random(0, 1000)
+
+        renderer = GetComponent<Renderer>()
+        renderer.material.mainTexture = GenerateTexture()
+
+    #Función que devuelve el mapa de Perlin
+    function GenerateTexture() -> Texture2D:
+        texture: Texture2D = new Texture(width, height)
+        for x in 0..(width)
+            for y in 0..(height)
+                color: Color = CalculateColor(x, y)
+                texture.setPixel(x, y, color) 
+        
+        #función de Unity que guarda los cambios hechos a una textura
+        texture.Apply()
+        return texture
+
+    #función que asigna el color de cada pixel según el mapa de Perlin
+    function CalculateColor(x: int, y: int) -> Color:
+
+        xCoord: float
+        yCoord: float
+
+        #Transformamos las coordenadas en valores entre 0 y 1
+        xCoord = x / width * scale + offsetX
+        yCoord = y / height * scale + offsetY
+
+        #Consultamos el mapa de Perlin generado en un pixel concreto
+        sample: pixel
+        pixel = PerlinNoiseGenerator.GetPixel(xCoord,yCoord)
+        color: Color
+        color = new Color(pixel, pixel, pixel)
+        return color
+
+```
+
+- **Clase _Perlin Noise Generator_**, se encarga de crear el mapa de altura que luego se puede consultar para crear la textura
+
+```
+class PerinNoiseGenrator:
+    octaves: PerlinOctave[]
+    weights: float[]
+
+    function PerlinNoiseGenerator(weights: float[]):
+        this.weights = weights
+
+        #Creamos octavas aleatoriamente de manera que cada octava es el doble de su anterior
+        size = 1
+        for _ in weights:
+            octaves.push(PerlinOctave(size))
+            size *= 2
+    
+    function getPixel(x:float, y: float) ->float:
+        result = 0
+        for i in 0..octaves.length():
+            weight = weights[i]
+            height = octaves[i].get(x,y)
+            result += weight * height
+        return result
+
+```
+
+- **Clase _PerlinOctave_**, representan las cuadrículas que componen el terreno
+
+```
+class PerlinOctave:
+    gradient: float[][][2]
+    size: int
+
+    function PerlinOctave(size: int):
+        this.size = size
+
+        #Crea una malla de vectores unitarios aleatorios en cada esquina de la octava (llamados gradientes)
+        gradient = float[size+1][size+1][2]
+        for x in 0..(size + 1):
+            for y in 0..(size + 1):
+                gradient[x][y][0] = randomRange(-1,1)
+                gradient[x][y][1] = randomRange(-1,1) 
+
+    #Calculamos la altura para cada punto del terreno
+    #Dicha altura dependerá de los 4 gradientes que estén en las coordenadas (ix, iy) de las esquinas de su celda
+    function scaledHeight(ix: int, iy: int, x: float, y: float) -> float:
+        dx: float = x - ix
+        dy: float = y - iy
+
+        return dx * gradient[ix][iy][0] + dy * gradient[ix][iy][1]
+
+    #Para el cálculo de la altura se hace una interpolación entre los valores de las 4 esquinas de la octava
+    function get(x: float, y: float) -> float:
+        ix = int(x / size)
+        iy = int(y / size)
+        px = x - ix
+        py = y - iy
+
+        #Interpolación de valores
+        tl = scaledHeight(ix, iy, x, y)
+        tr = scaledHeight(ix + 1, iy, x, y)
+        t = lerp(tl, tr, px)
+        bl = scaledHeight(ix, iy + 1, x, y)
+        br = scaledHeight(ix + 1, iy + 1, x, y)
+        b = lerp(bl, br, px)
+        return lerp(t, b, py)
+
+```
+
 ### Enemigos
 Para el tratamiento de los enemigos se ha utlizado una _Máquina de Estados Finita_ (FSM), particularmente una FSM que usa _Herencia_ para definir los diferentes estados y transiciones entre los mismos. El pseudocódigo de las diferentes clases es el siguiente:
 
