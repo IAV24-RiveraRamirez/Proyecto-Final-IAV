@@ -168,6 +168,124 @@ class PerlinOctave:
 
 ```
 
+### Comportamiento NPCs
+
+Para la implementación del comportamientos de los NPCs utilizaremos Máquinas de Estado Finitas Jerárquicas (HFMS). Este tipo de máquinas de estados nos permitirá gestionar diferentes estados que pueden ser a su vez otras máquinas de estado. Es bastante útil para que los NPCs tengan partes claramente diferenciadas en su rutina: Trabajo, Ocio y Dormir. Estas pueden ser cuatro estados que son, a su vez, otras máquinas de estado con sus diferentes comportamientos y sub-estados, entre los que se cambiará por eventos sucededidos dentro de ese sub-estado. Los *estados padre* tendrán transiciones según los eventos del mundo, como la hora del día.
+
+El pseudocódigo que nos sirve como base para la HFMS es el siguiente:
+
+- **State** - Comportamiento a ejecutar. Cuenta con una serie de transiciones que comprueba constantemente
+```
+# Es una clase abstracta, pues sus hijos deben determinar qué sucede durante el estado
+abstract class State:
+
+    # Variables para settear el entorno donde se ejecuta este estado.
+    gameObject : GameObject # Usado para acceder a funciones propias del objeto 
+    fsm : HFSM # Usado para acceder a la Blackboard 
+
+    function Init(_gO : GameObject, _fsm : HFSM):
+        gameObject = _gO
+        fsm = _fsm
+        
+    # Tiene funciones que se ejecutarán en su entrada (Enter), en su salida (Exit) y durante su tiempo de vida (Update)
+    abstract function Enter()
+    abstract function Exit()
+    abstract function Update(dt : float)
+```
+
+- **Transition** - Condición a cumplir para que se pase del estado actual a un estado objetivo
+```
+abstract class Transition:
+    # Estado al que la transición debe saltar en caso de cumplirse su condición
+    nextState: State
+
+    # Variables de contexto
+    fsm : HFSM
+    gameObject : GameObject
+
+    # Constructora
+    Transicion(_nextState: State) -> Transition:
+        nextState = _nextState
+
+    # Proporciona el contexto
+    function Init(_gO : GameObject, _fsm : HFSM):
+        gameObject = _gO
+        fsm = _fsm
+
+    # Función para devolver el estado al que la transición debe saltar. Virtual por si se quisiera cambiar, pero no debería hacer falta
+    function virtual NextState() -> State:
+        return nextState
+
+    # Función abstracta que debe comprobar una condición concreta que definirá si se pasa o no de estado
+    abstract function Check() -> bool
+    
+    # Funciones abstractas que definen qué pasa al entrar (Enter) y salir (Exit) de la transición
+    abstract function Enter()
+    abstrac function Exit()
+```
+
+- **StateMachine** - Máquina de estados que ejecuta una serie de estados dados.
+```
+# Un tipo de hijo especial de la clase State, que permite ejecutar una serie de estados guardados en lugar de solamente 1
+class StateMachine overrides State:
+    #Es una clase que permite estar en un único estado a la vez
+    # Gracias a que State es una clase abstracta, esto también nos permite meter StateMachines como estados dentro de esta máquina de estados.
+    current : State
+    # Guardamos una referencia a la máquina de estados que está ejecutando esta. Nulo en caso de que sea la más alta en la jerarquía
+    parent : StateMachine
+
+    gameObject : GameObject
+    blackboard : Blackboard
+
+    fsmStructure : Dictionary<State, Transition[]>
+
+    # Vacía, necesaria para Override
+    functioon Enter()
+    # Vacía, neceseria para Override
+    function Exit()
+
+    function SetContext(object : GameObject, _parent : StateMachine):
+        gameObject = object
+        parent = _parent
+
+    function StartMachine(initial : State):
+        current = initial
+        current.Enter()
+
+        foreach(Transition t in fsmStructure[current]):
+            t.Enter()
+
+    function Update(dt : float):
+        # Llama a la actualización del comportamiento actual
+        current.Update()
+        #Comprueba las transiciones y cambia de estado en caso de que se cumpla alguna
+        bool changeState = false;
+        foreach(Transition t in fsmStructure[current]):
+            changeState = ChangeState(t)
+
+    function ChangeState(t : Transition):
+        changeState : bool = t.Check()
+        if(changeState):
+            t.Exit()
+            current.Exit()
+            current = t.NextState()
+            current.Enter()
+            foreach(Transition t in fsmStructure[current]):
+                t.Enter()
+        return changeState
+
+    function AddState(State s, Transition[] transitions):
+        s.Init(gameObject, this)
+        foreach(Transition t in transitions):
+                t.Init(gameObject, this)
+        fsmStructure.Add(s. transitions)
+```
+
+Gracias a esta implementación podremos tener una máquina de estados 'padre', con diferentes estados que pueden ser a su vez otra máquina de estados, lo que permite una abstracción interesante de cada estado y una mayor modularidad. A continuación un ejemplo:
+
+<image src="gdd_assets/HFSM_Example.png"/>
+
+
 ### Enemigos
 Para el tratamiento de los enemigos se ha utlizado una _Máquina de Estados Finita_ (FSM), particularmente una FSM que usa _Herencia_ para definir los diferentes estados y transiciones entre los mismos. El pseudocódigo de las diferentes clases es el siguiente:
 
