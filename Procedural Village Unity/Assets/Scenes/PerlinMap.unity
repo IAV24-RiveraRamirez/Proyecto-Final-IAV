@@ -154,10 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17cd4dec805142e48836724b1b994566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 128
-  height: 128
-  depth: 10
-  scale: 5
+  width: 256
+  height: 256
+  depth: 20
+  numOctaves: 20
+  scale: 50
 --- !u!154 &282803990
 TerrainCollider:
   m_ObjectHideFlags: 0

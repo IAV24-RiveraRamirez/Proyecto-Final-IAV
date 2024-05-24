@@ -16,6 +16,8 @@ public class PerlinNoise : MonoBehaviour
     int numOctaves = 15;
     [SerializeField]
     float scale = 10f;
+    [SerializeField]
+    GameObject water = null;
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
@@ -39,6 +41,13 @@ public class PerlinNoise : MonoBehaviour
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
         gameObject.transform.position = new Vector3(-width / 2, 0, -height / 2); //Centra el terreno
+
+        if (water != null) //Generación de agua
+        {
+            Vector3 spawnPosition = new Vector3(gameObject.transform.position.x + (width / 2), gameObject.transform.position.y + 1, gameObject.transform.position.z + (height / 2));
+            GameObject waterRef = GameObject.Instantiate(water, spawnPosition, Quaternion.identity);
+            waterRef.transform.localScale = new Vector3(width/2, 1, width/2);
+        }
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
