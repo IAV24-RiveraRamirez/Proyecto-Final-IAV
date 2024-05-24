@@ -18,8 +18,10 @@ public abstract class Transition
 
     public abstract void Enter();
     public abstract bool Check();
+    public abstract void Exit();
+    public abstract string ID();
+
     public virtual State NextState() { return nextState; }
 
-    public abstract void Exit();
 
 }

@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class StateMachine : State
+public abstract class StateMachine : State
 {
     private State current;
 
     public Blackboard blackboard;
 
-    Dictionary<State, Transition[]> fsmStructure = new Dictionary<State, Transition[]>();
-    
+    protected bool changedState = false;
+
+    string lastTransitionID = "";
     public StateMachine()
     {
         blackboard = new Blackboard();
@@ -24,22 +25,21 @@ public class StateMachine : State
     public void StartMachine(State initial)
     {
         current = initial;
-        current.Enter();
-        
-        foreach(Transition t in fsmStructure[current])
-        {
-            t.Enter();
-        }
+        EnterCurrentState();
     }
 
     public override void Update(float dt)
     {
         current.Update(dt);
-        Transition[] transitions = fsmStructure[current];
+        List<Transition> transitions = current.GetTransitions();
         bool changeState = false;
-        for(int i = 0; !changeState && i < transitions.Length; ++i)
+        for(int i = 0; !changeState && i < transitions.Count; ++i)
         {
             changeState = ChangeState(transitions[i]);
+        }
+        if (changedState && fsm != null)
+        {
+            fsm.changedState = true;
         }
     }
 
@@ -48,35 +48,53 @@ public class StateMachine : State
         bool changeState = t.Check();
         if(changeState)
         {
+            lastTransitionID = t.ID();
             t.Exit();
             current.Exit();
             current = t.NextState();
-            current.Enter();
-            foreach(Transition transition in fsmStructure[current])
-            {
-                transition.Enter();
-            }
+            EnterCurrentState();
+            
+            changedState = true;
         }
         return changeState;
     }
 
-    public StateMachine AddState(State s, Transition[] transitions)
+    private void EnterCurrentState()
+    {
+        if(current is StateMachine)
+        {
+            current.Init(gameObject, this);
+        }
+        current.Enter();
+        List<Transition> transitions = current.GetTransitions();
+        foreach (Transition t in transitions)
+        {
+            t.Enter();
+        }
+    }
+
+    public StateMachine AddState(State s)
     {
         s.Init(gameObject, this);
-        for(int i = 0; i < transitions.Length; ++i)
+        List<Transition> transitions = s.GetTransitions();
+        for(int i = 0; i < transitions.Count; ++i)
         {
             transitions[i].Init(gameObject, this);
         }
-        fsmStructure.Add(s, transitions);
         return this;
     }
+
+    public State GetActiveState() { return current; }
+    public string GetLastTransitionID() { return lastTransitionID; }
+
+    public bool HasChangedState() { return changedState; }
 
     /// <summary>
     /// won't be implemented, not necessary
     /// </summary>
     public override void Enter()
     {
-        return;
+        lastTransitionID = "";
     }
 
     /// <summary>
@@ -86,4 +104,6 @@ public class StateMachine : State
     {
         return;
     }
+
+    public abstract override string ID();
 }
