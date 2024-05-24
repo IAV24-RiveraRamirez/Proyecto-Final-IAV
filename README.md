@@ -326,3 +326,4 @@ Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo 
 Los recursos de terceros utilizados son de uso público.
 
 - _AI for Games_, Ian Millington.
+- Textura de hierba, https://www.pinterest.es/pin/2322237300422260/

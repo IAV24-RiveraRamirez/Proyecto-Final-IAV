@@ -1,3 +1,5 @@
+using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public class PerlinNoise : MonoBehaviour
@@ -10,22 +12,33 @@ public class PerlinNoise : MonoBehaviour
     //Altura del terreno
     [SerializeField]
     int depth = 20;
-    
+    [SerializeField]
+    int numOctaves = 15;
     [SerializeField]
     float scale = 10f;
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
-    
+
+    PerlinNoiseGenerator generator;
+
     void Start()
     {
-        //(Opcional)
+        if (width != height) //Para hacer el mapa cuadrado
+        {
+            if (width > height) height = width;
+            else width = height;
+        }
+
+        //(Opcional) Aleatoriza la generación
         offsetX = Random.Range(0f, 10000f);
         offsetY = Random.Range(0f, 10000f);
 
+        generator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
+
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        gameObject.transform.position = new Vector3(-width/2,0,-height/2); //Centra el terreno
+        gameObject.transform.position = new Vector3(-width / 2, 0, -height / 2); //Centra el terreno
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -43,13 +56,14 @@ public class PerlinNoise : MonoBehaviour
         {
             for (int y = 0; y < height; ++y)
             {
-                heights[x, y] = CalculateHeight(x, y);
+                heights[x, y] = generator.GetValue(x,y); //Calcula el valor de Perlin en un punto dado
+                //heights[x, y] = CalculateHeight(x, y);
             }
         }
         return heights;
     }
 
-    float CalculateHeight (int x, int y)
+    float CalculateHeight(int x, int y) //Método que usa el Perlin de Unity
     {
         float xCoor = (float)x / width * scale + offsetX;
         float yCoor = (float)y / height * scale + offsetY;
@@ -57,3 +71,5 @@ public class PerlinNoise : MonoBehaviour
         return Mathf.PerlinNoise(xCoor, yCoor);
     }
 }
+     
+
