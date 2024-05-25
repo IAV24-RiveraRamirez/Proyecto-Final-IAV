@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
@@ -17,12 +19,22 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField]
     float scale = 10f;
     [SerializeField]
+    int housesToSpawn = 6;
+    [SerializeField]
     GameObject water = null;
+    [SerializeField]
+    GameObject house = null;
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
+    int houseSpace = 6; //El tamaño de terreno que aplana una casa 
+    bool spawnWater = true;
 
-    PerlinNoiseGenerator generator;
+    float[,] heights;
+    Terrain terrain;
+    PerlinNoiseGenerator perlinGenerator;
+    StructuresGenerator structuresGenerator;
+    Vector3 buildingPosition;
 
     void Start()
     {
@@ -33,21 +45,55 @@ public class PerlinNoise : MonoBehaviour
         }
 
         //(Opcional) Aleatoriza la generación
-        offsetX = Random.Range(0f, 10000f);
-        offsetY = Random.Range(0f, 10000f);
+        //offsetX = Random.Range(0f, 10000f);
+        //offsetY = Random.Range(0f, 10000f);
 
-        generator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
+        perlinGenerator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
 
-        Terrain terrain = GetComponent<Terrain>();
+        terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        gameObject.transform.position = new Vector3(-width / 2, 0, -height / 2); //Centra el terreno
 
-        if (water != null) //Generación de agua
+        if (spawnWater && water != null) //Generación de agua
         {
             Vector3 spawnPosition = new Vector3(gameObject.transform.position.x + (width / 2), gameObject.transform.position.y + 1, gameObject.transform.position.z + (height / 2));
             GameObject waterRef = GameObject.Instantiate(water, spawnPosition, Quaternion.identity);
             waterRef.transform.localScale = new Vector3(width/2, 1, width/2);
         }
+        structuresGenerator = new StructuresGenerator(width);
+        StartCoroutine(findStartPosition());
+    }
+
+    IEnumerator findStartPosition()
+    {
+        yield return new WaitForSeconds(0.1f); //Esperamos porque si no los raycast no detectan el agua
+        if (structuresGenerator.findStartSpot(ref buildingPosition))
+        {
+            Vector3 originPoint = buildingPosition;
+            PlaceBuilding();
+            for(int i = 0; i < housesToSpawn-1; i++)
+            {
+                if (structuresGenerator.findNearSpots(ref buildingPosition)) PlaceBuilding();
+                else buildingPosition = originPoint;
+                yield return new WaitForSeconds(0.05f); //Esperamos porque si no los raycast no detectan el agua
+            }
+        }
+    }
+
+    void PlaceBuilding() //Allana el terreno donde está el edificio colocado
+    {
+        buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace / 2, width - (houseSpace / 2)); //Comprobamos que la casa tenga espacio para aplanar el terreno
+        buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace / 2, width - (houseSpace / 2));
+        GameObject.Instantiate(house, buildingPosition, Quaternion.identity);
+        Vector3 initialPos = new Vector3(buildingPosition.z - (houseSpace / 2), buildingPosition.y, buildingPosition.x - (houseSpace / 2));
+        float initial = heights[(int)buildingPosition.z, (int)buildingPosition.x];
+        for (int x = 0; x < houseSpace; ++x)
+        {
+            for (int y = 0; y < houseSpace; y++)
+            {
+                heights[(int)initialPos.x + x, (int)initialPos.z + y] = initial;
+            }
+        }
+        terrain.terrainData.SetHeights(0, 0, heights);
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -60,12 +106,12 @@ public class PerlinNoise : MonoBehaviour
 
     float[,] GenerateHeights()
     {
-        float[,] heights = new float[width, height];
+        heights = new float[width, height];
         for (int x = 0; x < width; ++x)
         {
             for (int y = 0; y < height; ++y)
             {
-                heights[x, y] = generator.GetValue(x,y); //Calcula el valor de Perlin en un punto dado
+                heights[x, y] = perlinGenerator.GetValue(x,y); //Calcula el valor de Perlin en un punto dado
                 //heights[x, y] = CalculateHeight(x, y);
             }
         }
