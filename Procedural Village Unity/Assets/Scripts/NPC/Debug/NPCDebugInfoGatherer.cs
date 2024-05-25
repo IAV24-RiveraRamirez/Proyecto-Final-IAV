@@ -7,7 +7,7 @@ public class NPCDebugInfoGatherer : MonoBehaviour
     string debugInfo;
     string id = "";
 
-    [SerializeField] NPCBehaviourSM npcSM = null;
+    NPCBehaviourSM npcSM = null;
     StateMachine sM;
     // Start is called before the first frame update
     void Start()
@@ -20,19 +20,20 @@ public class NPCDebugInfoGatherer : MonoBehaviour
 
     private void Update()
     {
-        if(sM.HasChangedState() && id == NPCDebugManager.Instance.GetLastNPC())
+        if(npcSM.GetStateMachine().HasChangedState() && id == NPCDebugManager.Instance.GetLastNPC())
         {
-            SendInfo();
+            SendInfo(true);
         } 
     }
 
-    public void SendInfo()
+    public void SendInfo(bool update = false)
     {
         if(!npcSM) { Debug.LogError("NPC State Machine is missing on: " + gameObject.name + " GameObject."); return; }
         debugInfo = "";
 
         sM = npcSM.GetStateMachine();
-        debugInfo = "Father SM: " + sM.ID() + '\n';
+        debugInfo = "GameObject: " + gameObject.name + '\n';
+        debugInfo += "Father SM: " + sM.ID() + '\n';
         debugInfo += "Last Transition: " + sM.GetLastTransitionID() + '\n';
 
         State current = sM.GetActiveState();
@@ -51,7 +52,8 @@ public class NPCDebugInfoGatherer : MonoBehaviour
             isSM = current is StateMachine;
         }
         debugInfo += "Active State: " + current.ID();
-        NPCDebugManager.Instance.SetInfo(gameObject.name, debugInfo);
+        if(!update) NPCDebugManager.Instance.SetInfo(gameObject.name, debugInfo);
+        else NPCDebugManager.Instance.UpdateInfo(gameObject.name, debugInfo);
     }
 
     public void HideInfo()

@@ -30,6 +30,7 @@ public abstract class StateMachine : State
 
     public override void Update(float dt)
     {
+        changedState = false;
         current.Update(dt);
         List<Transition> transitions = current.GetTransitions();
         bool changeState = false;

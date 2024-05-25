@@ -16,17 +16,9 @@ class NPCBaseSM : StateMachine
         TestState_2 state2 = new TestState_2();
         TestStateMachine_1 state3 = new TestStateMachine_1();
 
-        Transition[] transitions1 = new Transition[2];
-        transitions1[0] = new T_UpArrow(state2);
-        transitions1[1] = new T_LeftArrow(state3);
-
-        Transition[] transitions2 = new Transition[2];
-        transitions2[0] = new T_RightArrow(state1);
-        transitions2[1] = new T_LeftArrow(state3);
-
-        state1.AddTransition(transitions1);
-        state2.AddTransition(transitions2);
-        state3.AddTransition(new T_UpArrow(state2));
+        state1.AddTransition(new T_Morning(state2));
+        state2.AddTransition(new T_Afternoon(state3));
+        state3.AddTransition(new T_Evening(state1));
 
         AddState(state1).AddState(state2).AddState(state3);
 

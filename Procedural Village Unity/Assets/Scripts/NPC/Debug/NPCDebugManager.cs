@@ -7,7 +7,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 public class NPCDebugManager : MonoBehaviour
 {
-
     private static NPCDebugManager instance = null;
     public static NPCDebugManager Instance
     {
@@ -33,15 +32,28 @@ public class NPCDebugManager : MonoBehaviour
     public void SetInfo(string gO, string text)
     {
         lastNPCShowingInfo = gO;
-        if (shownInfo) shownInfo.text = text;
+        if (shownInfo) 
+            shownInfo.text = text;
+        else 
+            Debug.LogError("Text not found.");
+    }
+
+    public void UpdateInfo(string gO, string text)
+    {
+        if (shownInfo)
+        {
+            if (lastNPCShowingInfo == gO && shownInfo.text != "") { shownInfo.text = text; }
+        }
         else Debug.LogError("Text not found.");
     }
 
     public void HideInfo(string gO)
     {
         if(lastNPCShowingInfo == gO) {
-            if (shownInfo) shownInfo.text = "";
-            else Debug.LogError("Text not found.");
+            if (shownInfo) 
+                shownInfo.text = "";
+            else 
+                Debug.LogError("Text not found.");
         }
     }
 
