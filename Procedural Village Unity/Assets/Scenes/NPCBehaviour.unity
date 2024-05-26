@@ -317,6 +317,7 @@ GameObject:
   - component: {fileID: 410435713}
   - component: {fileID: 410435712}
   - component: {fileID: 410435711}
+  - component: {fileID: 410435714}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -398,6 +399,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 48917669}
   m_LocalEulerAnglesHint: {x: 49.451, y: 0, z: 0}
+--- !u!114 &410435714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410435710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c49b4cc203aa6414fae5c798d1d0e7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!4 &658477892 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1545746640040886266, guid: 60d109779deb27540ab3465c57dea0dd, type: 3}
@@ -944,6 +961,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_LeisurePlace (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4082308568523484365, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: maxNpcs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.68
@@ -1001,6 +1022,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_LeisurePlace (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4082308568523484365, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: maxNpcs
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.4
@@ -1057,6 +1082,10 @@ PrefabInstance:
     - target: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_Name
       value: NPC_LeisurePlace (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082308568523484365, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: maxNpcs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1210,6 +1239,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_WorkPlace (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3794811936094702181, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: maxNpcs
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1330,6 +1363,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_WorkPlace (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 3794811936094702181, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: maxNpcs
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1352,6 +1389,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ac25d25cf126849aa33f61f5931abd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cam: {fileID: 0}
 --- !u!1001 &2105739404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1403,6 +1441,10 @@ PrefabInstance:
     - target: {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Name
       value: NPC_WorkPlace (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794811936094702181, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: maxNpcs
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1482,6 +1524,10 @@ PrefabInstance:
     - target: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_Name
       value: NPC_LeisurePlace
+      objectReference: {fileID: 0}
+    - target: {fileID: 4082308568523484365, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: maxNpcs
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1681,6 +1727,10 @@ PrefabInstance:
     - target: {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Name
       value: NPC_WorkPlace
+      objectReference: {fileID: 0}
+    - target: {fileID: 3794811936094702181, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: maxNpcs
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
