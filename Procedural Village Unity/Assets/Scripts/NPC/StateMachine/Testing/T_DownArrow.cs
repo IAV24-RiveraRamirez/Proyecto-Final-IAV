@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class T_DownArrow : Transition
 {
-    public T_DownArrow(State nextState) : base(nextState)
+    public T_DownArrow(StateMachine nextState) : base(nextState)
     {
     }
 

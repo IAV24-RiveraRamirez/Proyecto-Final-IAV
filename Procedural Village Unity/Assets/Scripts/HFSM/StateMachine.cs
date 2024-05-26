@@ -103,7 +103,7 @@ public abstract class StateMachine : State
     /// </summary>
     public override void Exit()
     {
-        return;
+        current.Exit();
     }
 
     public abstract override string ID();

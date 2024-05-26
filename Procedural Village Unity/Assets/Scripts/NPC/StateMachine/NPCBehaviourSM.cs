@@ -12,9 +12,9 @@ class NPCBaseSM : StateMachine
     {
         base.Init(g, fsm);
 
-        TestState_1 state1 = new TestState_1();
-        TestState_2 state2 = new TestState_2();
-        TestStateMachine_1 state3 = new TestStateMachine_1();
+        State state1 = new SM_Sleep();
+        State state2 = new SM_Work();
+        State state3 = new SM_Leisure();
 
         state1.AddTransition(new T_Morning(state2));
         state2.AddTransition(new T_Afternoon(state3));
@@ -23,7 +23,6 @@ class NPCBaseSM : StateMachine
         AddState(state1).AddState(state2).AddState(state3);
 
         StartMachine(state1);
-        
     }
 }
 

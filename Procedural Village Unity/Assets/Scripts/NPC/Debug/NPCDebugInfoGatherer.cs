@@ -35,7 +35,7 @@ public class NPCDebugInfoGatherer : MonoBehaviour
         debugInfo = "GameObject: " + gameObject.name + '\n';
         debugInfo += "Father SM: " + sM.ID() + '\n';
         debugInfo += "Last Transition: " + sM.GetLastTransitionID() + '\n';
-
+        
         State current = sM.GetActiveState();
         
         bool isSM = current is StateMachine;

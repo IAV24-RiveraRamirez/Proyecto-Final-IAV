@@ -10,7 +10,7 @@ public abstract class Transition
 
     public Transition(State nextState) { this.nextState = nextState; }
 
-    public void Init(GameObject g, StateMachine fsm)
+    public virtual void Init(GameObject g, StateMachine fsm)
     {
         gameObject = g;
         this.fsm = fsm;

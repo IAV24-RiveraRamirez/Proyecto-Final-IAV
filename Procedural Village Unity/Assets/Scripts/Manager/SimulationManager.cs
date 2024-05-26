@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -59,6 +60,9 @@ public class SimulationManager : MonoBehaviour
     // Enums
     public enum TimePeriods { MORNING, AFTERNOON, EVENING }
 
+    // References 
+    [SerializeField] GameObject npcPrefab = null;
+
     // Parameters
     [Tooltip("How fast time goes by")]
     [SerializeField] float timeRate = 0.5f;
@@ -82,10 +86,16 @@ public class SimulationManager : MonoBehaviour
 
     TimePeriods currentPeriod = TimePeriods.MORNING;
 
+    Dictionary<NPCBuilding.BuildingType, List<NPCBuilding>> npcBuildings = new Dictionary<NPCBuilding.BuildingType, List<NPCBuilding>>();
+
+    List<NPCBuilding> avaliableWorkingPlaces = new List<NPCBuilding>();
+    List<NPCBuilding> avaliableLeisurePlaces = new List<NPCBuilding>();
+
     // Getters
     public float GetTime() { return time; }
     public float GetTimePercent() { return time / HOURS_IN_DAY; }
     public TimePeriods GetCurrentPeriod() { return currentPeriod; }
+    public GameObject GetNPCPrefab() { return npcPrefab; }
 
     // Own Methods
     void HandleTime()
@@ -111,12 +121,80 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
+    public void AddBuilding(NPCBuilding building)
+    {
+        NPCBuilding.BuildingType type = building.GetBuildingType();
+
+        if(!npcBuildings.ContainsKey(type))
+        {
+            npcBuildings.Add(type, new List<NPCBuilding>());
+        }
+
+        if (type == NPCBuilding.BuildingType.WORK) avaliableWorkingPlaces.Add(building);
+        else if (type == NPCBuilding.BuildingType.LEISURE) avaliableLeisurePlaces.Add(building);
+
+        npcBuildings[type].Add(building);
+    }
+
+    private NPCBuilding GetNewBuilding(NPCInfo npc, Vector3 housePosition, NPCBuilding.BuildingType type)
+    {
+        List<NPCBuilding> buildings;
+        if (type == NPCBuilding.BuildingType.LEISURE) buildings = avaliableLeisurePlaces;
+        else if (type == NPCBuilding.BuildingType.WORK) buildings = avaliableWorkingPlaces;
+        else return null;
+
+        NPCBuilding newBuilding = null;
+
+        float distance = float.PositiveInfinity;
+        foreach (NPCBuilding building in buildings)
+        {
+            if ((building.transform.position - housePosition).magnitude < distance)
+            {
+                newBuilding = building;
+            }
+        }
+
+        if (newBuilding.AddNPC(npc))
+        {
+            buildings.Remove(newBuilding);
+        }
+
+        return newBuilding;
+    }
+
+    public NPCBuilding GetNewWorkingPlace(NPCInfo npc, Vector3 housePosition)
+    {
+        return GetNewBuilding(npc, housePosition, NPCBuilding.BuildingType.WORK);
+    }
+
+    public NPCBuilding GetNewLeisurePlace(NPCInfo npc, Vector3 housePosition)
+    {
+        return GetNewBuilding(npc, housePosition, NPCBuilding.BuildingType.LEISURE);
+    }
+
+    IEnumerator SpawnNPCs(float afterSeconds)
+    {
+        yield return new WaitForSeconds(afterSeconds);
+
+        foreach(NPCBuilding building in npcBuildings[NPCBuilding.BuildingType.HOUSE])
+        {
+            int maxNPCs = building.GetMaxNPCs();
+            int NPCsToSpawn = UnityEngine.Random.Range(1, maxNPCs + 1);
+            House house = building as House;
+            house.SpawnNPCs(NPCsToSpawn);
+        }
+    }
+
     // Unity Methods
 
     // Start is called before the first frame update
     void Start()
     {
-
+        if (!npcPrefab)
+        {
+            Debug.LogError("Missing 'NPCPrefab' reference on SimulationManager.");
+        }
+        StartCoroutine(SpawnNPCs(1.0f));
     }
 
     // Update is called once per frame
