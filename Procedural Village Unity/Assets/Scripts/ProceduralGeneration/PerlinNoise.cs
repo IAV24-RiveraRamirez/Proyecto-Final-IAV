@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.Sqlite;
@@ -30,11 +31,12 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField]
     GameObject water = null;
     [SerializeField]
-    GameObject house = null;
+    List<GameObject> buildings = null;
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
     int houseSpace = 6; //El tamaño de terreno que aplana una casa 
+    [SerializeField]
     bool spawnWater = true;
 
     float[,] heights;
@@ -54,8 +56,8 @@ public class PerlinNoise : MonoBehaviour
         }
 
         //(Opcional) Aleatoriza la generación
-        //offsetX = Random.Range(0f, 10000f);
-        //offsetY = Random.Range(0f, 10000f);
+        offsetX = UnityEngine.Random.Range(0f, 10000f);
+        offsetY = UnityEngine.Random.Range(0f, 10000f);
 
         perlinGenerator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
 
@@ -85,7 +87,7 @@ public class PerlinNoise : MonoBehaviour
 
     IEnumerator findStartPosition()
     {
-        yield return new WaitForSeconds(0.1f); //Esperamos porque si no los raycast no detectan el agua
+        yield return new WaitForNextFrameUnit(); //Esperamos porque si no los raycast no detectan el agua
         if (structuresGenerator.findStartSpot(ref buildingPosition))
         {
             List<Vector3> places = new List<Vector3>();
@@ -105,7 +107,7 @@ public class PerlinNoise : MonoBehaviour
                     places.Add(buildingPosition);
                 }
                 else buildingPosition = originPoint;
-                yield return new WaitForSeconds(0.05f); //Esperamos porque si no los raycast no detectan el agua
+                yield return new WaitForNextFrameUnit();
             }
             center = center / places.Count; //Aproximación del centro de la aldea
             foreach (Vector3 v in places)
@@ -113,6 +115,7 @@ public class PerlinNoise : MonoBehaviour
                 maxVillageSize = Mathf.Max(maxVillageSize, Vector3.Distance(center, v));
             }
             maxVillageSize *= 2f; //Lo agrandamos para asegurar que llega
+            Debug.LogWarning("Hola: " + maxVillageSize + " " + center);
             CreateNavMesh(maxVillageSize, center);
         }
     }
@@ -121,7 +124,7 @@ public class PerlinNoise : MonoBehaviour
     {
         buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace / 2 +1, width - (houseSpace / 2) + 1); //Comprobamos que la casa tenga espacio para aplanar el terreno
         buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace / 2 +1, width - (houseSpace / 2) + 1);
-        GameObject.Instantiate(house,buildingPosition, Quaternion.identity);
+        GameObject.Instantiate(buildings[UnityEngine.Random.Range(0, buildings.Count)],buildingPosition, Quaternion.identity);
         Vector3 initialPos = new Vector3(buildingPosition.z - (houseSpace / 2), buildingPosition.y, buildingPosition.x - (houseSpace / 2));
         float initialHeight = heights[(int)buildingPosition.z, (int)buildingPosition.x];
         for (int x = 0; x <= houseSpace; ++x)
@@ -146,16 +149,10 @@ public class PerlinNoise : MonoBehaviour
 
     void CreateNavMesh(float maxDimension, Vector3 center) //Crea la malla de navegación de la IA
     {
-        GameObject navMesh = new GameObject();
-        navMesh.transform.SetParent(terrain.gameObject.transform);
-        navMesh.name = "NavMeshGO";
-        navMesh.AddComponent<NavMeshSurface>();
-        NavMeshSurface navMeshSurface = navMesh.GetComponent<NavMeshSurface>();
-        navMeshSurface.collectObjects = CollectObjects.Volume; //Ajustamos su alcance a un volumen
+        NavMeshSurface navMeshSurface = gameObject.GetComponentInChildren<NavMeshSurface>();
+        //navMeshSurface.collectObjects = CollectObjects.Volume; //Ajustamos su alcance a un volumen
         navMeshSurface.size = new Vector3(maxDimension, depth, maxDimension);//volumen del tamaño de la aldea
         navMeshSurface.center = center;
-        int defaultLayer = LayerMask.NameToLayer("Default");
-        navMeshSurface.layerMask = 1 << defaultLayer; //Solo cogemos los elementos del terreno (no bakeamos el agua para ahorrar tiempo)
         navMeshSurface.BuildNavMesh();
     }
     TerrainData GenerateTerrain(TerrainData terrainData)

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4545344595571582357}
   - component: {fileID: 4082308568523484365}
   - component: {fileID: 1146309310196408409}
+  - component: {fileID: 5389583521207754366}
   m_Layer: 0
   m_Name: NPC_LeisurePlace
   m_TagString: Untagged
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f701d183e0b1f40ad28639e68954d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 4
+  maxNpcs: 200
   type: 2
 --- !u!114 &1146309310196408409
 MonoBehaviour:
@@ -119,6 +120,27 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!65 &5389583521207754366
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668946244271841132}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3654044133647153390
 GameObject:
   m_ObjectHideFlags: 0

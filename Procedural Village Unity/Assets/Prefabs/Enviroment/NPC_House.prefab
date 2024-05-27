@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6987284741506350605}
   - component: {fileID: 737307525491861859}
   - component: {fileID: 7942402107532426420}
+  - component: {fileID: 140419046337637805}
   m_Layer: 0
   m_Name: NPC_House
   m_TagString: Untagged
@@ -120,6 +121,27 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!65 &140419046337637805
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3567311589662379801}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7318367258683524310
 GameObject:
   m_ObjectHideFlags: 0

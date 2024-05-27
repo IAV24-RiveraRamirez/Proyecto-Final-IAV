@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 518446602289631517}
   - component: {fileID: 3794811936094702181}
   - component: {fileID: 6204807597008215171}
+  - component: {fileID: 8985779086721830314}
   m_Layer: 0
   m_Name: NPC_WorkPlace
   m_TagString: Untagged
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f701d183e0b1f40ad28639e68954d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 4
+  maxNpcs: 200
   type: 1
 --- !u!114 &6204807597008215171
 MonoBehaviour:
@@ -119,6 +120,27 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!65 &8985779086721830314
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018873329447505036}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6181668583185900238
 GameObject:
   m_ObjectHideFlags: 0
