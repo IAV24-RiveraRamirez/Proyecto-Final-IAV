@@ -1,8 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
+using Unity.VisualScripting;
+using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEditor;
 using UnityEditor.PackageManager.UI;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
+using UnityEngine.UIElements;
 
 public class PerlinNoise : MonoBehaviour
 {
@@ -35,6 +42,8 @@ public class PerlinNoise : MonoBehaviour
     PerlinNoiseGenerator perlinGenerator;
     StructuresGenerator structuresGenerator;
     Vector3 buildingPosition;
+    GameObject cameraRef;
+    Vector3 cameraPosition;
 
     void Start()
     {
@@ -61,6 +70,17 @@ public class PerlinNoise : MonoBehaviour
         }
         structuresGenerator = new StructuresGenerator(width);
         StartCoroutine(findStartPosition());
+
+        cameraRef = GameObject.Find("Main Camera");//Se puede hacer mejor
+        if(cameraRef) cameraPosition = cameraRef.transform.position;
+    }
+
+    private void Update()
+    {
+        if(cameraRef)
+        {
+            cameraRef.transform.position = Vector3.Lerp(cameraRef.transform.position, cameraPosition, Time.deltaTime); //Movimiento de la cámara para apuntar hacia la aldea
+        }
     }
 
     IEnumerator findStartPosition()
@@ -68,34 +88,76 @@ public class PerlinNoise : MonoBehaviour
         yield return new WaitForSeconds(0.1f); //Esperamos porque si no los raycast no detectan el agua
         if (structuresGenerator.findStartSpot(ref buildingPosition))
         {
+            List<Vector3> places = new List<Vector3>();
             Vector3 originPoint = buildingPosition;
+            places.Add(originPoint);
             PlaceBuilding();
-            for(int i = 0; i < housesToSpawn-1; i++)
+            float maxVillageSize = 10;
+            cameraPosition = originPoint + new Vector3(0,80,-50);
+            Vector3 center = originPoint;
+            
+            for (int i = 0; i < housesToSpawn-1; i++)
             {
-                if (structuresGenerator.findNearSpots(ref buildingPosition)) PlaceBuilding();
+                if (structuresGenerator.findNearSpots(ref buildingPosition))
+                {
+                    PlaceBuilding();
+                    center += buildingPosition;
+                    places.Add(buildingPosition);
+                }
                 else buildingPosition = originPoint;
                 yield return new WaitForSeconds(0.05f); //Esperamos porque si no los raycast no detectan el agua
             }
+            center = center / places.Count; //Aproximación del centro de la aldea
+            foreach (Vector3 v in places)
+            {
+                maxVillageSize = Mathf.Max(maxVillageSize, Vector3.Distance(center, v));
+            }
+            maxVillageSize *= 2f; //Lo agrandamos para asegurar que llega
+            CreateNavMesh(maxVillageSize, center);
         }
     }
 
     void PlaceBuilding() //Allana el terreno donde está el edificio colocado
     {
-        buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace / 2, width - (houseSpace / 2)); //Comprobamos que la casa tenga espacio para aplanar el terreno
-        buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace / 2, width - (houseSpace / 2));
-        GameObject.Instantiate(house, buildingPosition, Quaternion.identity);
+        buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace / 2 +1, width - (houseSpace / 2) + 1); //Comprobamos que la casa tenga espacio para aplanar el terreno
+        buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace / 2 +1, width - (houseSpace / 2) + 1);
+        GameObject.Instantiate(house,buildingPosition, Quaternion.identity);
         Vector3 initialPos = new Vector3(buildingPosition.z - (houseSpace / 2), buildingPosition.y, buildingPosition.x - (houseSpace / 2));
-        float initial = heights[(int)buildingPosition.z, (int)buildingPosition.x];
-        for (int x = 0; x < houseSpace; ++x)
+        float initialHeight = heights[(int)buildingPosition.z, (int)buildingPosition.x];
+        for (int x = 0; x <= houseSpace; ++x)
         {
-            for (int y = 0; y < houseSpace; y++)
+            for (int y = 0; y <= houseSpace; y++)
             {
-                heights[(int)initialPos.x + x, (int)initialPos.z + y] = initial;
+                float distanceToCenter = Vector2.Distance(new Vector2(x, y), new Vector2(houseSpace / 2, houseSpace / 2));
+                if (distanceToCenter > 2.5) //Distancia estándar
+                {
+                    float t = Mathf.InverseLerp(houseSpace / 2, 0, distanceToCenter); //Interpolamos alturas
+                    float interpolatedHeight = Mathf.Lerp(heights[(int)initialPos.x + x, (int)initialPos.z + y], initialHeight, t);
+                    heights[(int)initialPos.x + x, (int)initialPos.z + y] = interpolatedHeight;
+                }
+                else //Si es un vértice muy cercano al punto de generación, se aplana directamente
+                {
+                    heights[(int)initialPos.x + x, (int)initialPos.z + y] = initialHeight;
+                }
             }
         }
         terrain.terrainData.SetHeights(0, 0, heights);
     }
 
+    void CreateNavMesh(float maxDimension, Vector3 center) //Crea la malla de navegación de la IA
+    {
+        GameObject navMesh = new GameObject();
+        navMesh.transform.SetParent(terrain.gameObject.transform);
+        navMesh.name = "NavMeshGO";
+        navMesh.AddComponent<NavMeshSurface>();
+        NavMeshSurface navMeshSurface = navMesh.GetComponent<NavMeshSurface>();
+        navMeshSurface.collectObjects = CollectObjects.Volume; //Ajustamos su alcance a un volumen
+        navMeshSurface.size = new Vector3(maxDimension, depth, maxDimension);//volumen del tamaño de la aldea
+        navMeshSurface.center = center;
+        int defaultLayer = LayerMask.NameToLayer("Default");
+        navMeshSurface.layerMask = 1 << defaultLayer; //Solo cogemos los elementos del terreno (no bakeamos el agua para ahorrar tiempo)
+        navMeshSurface.BuildNavMesh();
+    }
     TerrainData GenerateTerrain(TerrainData terrainData)
     {
         terrainData.heightmapResolution = width + 1;

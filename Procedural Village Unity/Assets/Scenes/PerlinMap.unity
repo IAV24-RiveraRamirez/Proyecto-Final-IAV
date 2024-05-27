@@ -159,6 +159,7 @@ MonoBehaviour:
   depth: 45
   numOctaves: 10
   scale: 70
+  housesToSpawn: 15
   water: {fileID: 8175967659044370911, guid: d8630c95f9a48b845b7ff9c7131edb50, type: 3}
   house: {fileID: 8850752895350719853, guid: 7d1c01453c719534d848b738291f407a, type: 3}
 --- !u!154 &282803990
