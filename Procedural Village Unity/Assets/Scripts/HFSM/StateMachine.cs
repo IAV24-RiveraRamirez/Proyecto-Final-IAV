@@ -12,14 +12,15 @@ public abstract class StateMachine : State
     protected bool changedState = false;
 
     string lastTransitionID = "";
+
     public StateMachine()
     {
         blackboard = new Blackboard();
     }
 
-    public void SetContext(GameObject gO)
+    public override void Init(GameObject g, StateMachine fsm)
     {
-        gameObject = gO;
+        base.Init(g, fsm);
     }
 
     public void StartMachine(State initial)

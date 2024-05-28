@@ -32,7 +32,8 @@ public class NPCDebugInfoGatherer : MonoBehaviour
         debugInfo = "";
 
         sM = npcSM.GetStateMachine();
-        debugInfo = "GameObject: " + gameObject.name + '\n';
+        debugInfo = "Money: " + gameObject.GetComponent<NPCInfo>().GetMoney().ToString() + '\n' + "----------------\n\n";
+        debugInfo += "GameObject: " + gameObject.name + '\n';
         debugInfo += "Father SM: " + sM.ID() + '\n';
         debugInfo += "Last Transition: " + sM.GetLastTransitionID() + '\n';
         

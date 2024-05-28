@@ -5,7 +5,7 @@ using UnityEngine;
 public class NPCBuilding : MonoBehaviour
 {
     // Enums
-    public enum BuildingType { HOUSE, WORK, LEISURE }
+    public enum BuildingType { HOUSE, WORK, LEISURE, MARKET }
 
     // Parameters
     [SerializeField] protected int maxNpcs = 4;

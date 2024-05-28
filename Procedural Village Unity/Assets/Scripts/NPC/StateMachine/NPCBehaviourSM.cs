@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 class NPCBaseSM : StateMachine
@@ -8,12 +10,21 @@ class NPCBaseSM : StateMachine
     {
         return "FatherNPC_SM";
     }
+
     public override void Init(GameObject g, StateMachine fsm)
     {
         base.Init(g, fsm);
 
         State state1 = new SM_Sleep();
-        State state2 = new SM_Work();
+
+        State state2 = null;
+
+        if (gameObject.GetComponent<NPCInfo>().GetWorkPlace() is Sawmill)
+        {
+            state2 = new SM_SawmillWorker();
+        }
+        else state2 = new SM_Work();
+
         State state3 = new SM_Leisure();
 
         state1.AddTransition(new T_Morning(state2));
@@ -22,7 +33,25 @@ class NPCBaseSM : StateMachine
 
         AddState(state1).AddState(state2).AddState(state3);
 
-        StartMachine(state1);
+        SimulationManager mngr = SimulationManager.Instance;
+        switch (mngr.GetCurrentPeriod())
+        {
+            case SimulationManager.TimePeriods.MORNING:
+            {
+                StartMachine(state1);
+                break;
+            }
+            case SimulationManager.TimePeriods.AFTERNOON:
+            {
+                StartMachine(state2);
+                break;
+            }
+            case SimulationManager.TimePeriods.EVENING:
+            {
+                StartMachine(state3);
+                break;
+            }
+        }
     }
 }
 

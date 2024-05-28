@@ -35,6 +35,7 @@ public class House : NPCBuilding
             info.SetHouse(this);
             info.SetWorkPlace(SimulationManager.Instance.GetNewWorkingPlace(info, gameObject.transform.position));
             info.SetLeisurePlace(SimulationManager.Instance.GetNewLeisurePlace(info, gameObject.transform.position));
+            info.SetMarketPlace(SimulationManager.Instance.GetNewMarketPlace(info, info.GetWorkPlace().transform.position));
 
             ++n;
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class NPCInfo : MonoBehaviour
@@ -8,11 +9,18 @@ public class NPCInfo : MonoBehaviour
     House house = null;
     NPCBuilding workingPlace = null;
     NPCBuilding leisurePlace = null;
+    NPCBuilding marketPlace = null;
+
+    float money;
+
+    public void ChangeMoney(float amount) { money += amount; }
 
     // Getters
+    public float GetMoney() { return money; }
     public House GetHouse() { return house; }
     public NPCBuilding GetWorkPlace() { return workingPlace; }
     public NPCBuilding GetLeisurePlace() { return leisurePlace; }
+    public NPCBuilding GetMarketPlace() { return marketPlace; }
 
     // Setters
     public void SetHouse(House house)
@@ -28,5 +36,10 @@ public class NPCInfo : MonoBehaviour
     public void SetLeisurePlace(NPCBuilding leisurePlace)
     {
         this.leisurePlace = leisurePlace;
+    }
+
+    public void SetMarketPlace(NPCBuilding marketplace)
+    {
+        this.marketPlace = marketplace;
     }
 }

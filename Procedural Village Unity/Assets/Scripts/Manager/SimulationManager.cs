@@ -143,6 +143,7 @@ public class SimulationManager : MonoBehaviour
         List<NPCBuilding> buildings;
         if (type == NPCBuilding.BuildingType.LEISURE) buildings = avaliableLeisurePlaces;
         else if (type == NPCBuilding.BuildingType.WORK) buildings = avaliableWorkingPlaces;
+        else if (type == NPCBuilding.BuildingType.MARKET) buildings = npcBuildings[NPCBuilding.BuildingType.MARKET];
         else return null;
 
         NPCBuilding newBuilding = null;
@@ -172,6 +173,11 @@ public class SimulationManager : MonoBehaviour
     public NPCBuilding GetNewLeisurePlace(NPCInfo npc, Vector3 housePosition)
     {
         return GetNewBuilding(npc, housePosition, NPCBuilding.BuildingType.LEISURE);
+    }
+
+    public NPCBuilding GetNewMarketPlace(NPCInfo npc, Vector3 wokrplacePosition)
+    {
+        return GetNewBuilding(npc, wokrplacePosition, NPCBuilding.BuildingType.MARKET);
     }
 
     IEnumerator SpawnNPCs(float afterSeconds)
