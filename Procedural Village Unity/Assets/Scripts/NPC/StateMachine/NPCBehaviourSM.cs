@@ -19,10 +19,9 @@ class NPCBaseSM : StateMachine
 
         State state2 = null;
 
-        if (gameObject.GetComponent<NPCInfo>().GetWorkPlace() is Sawmill)
-        {
-            state2 = new SM_SawmillWorker();
-        }
+        NPCBuilding building = gameObject.GetComponent<NPCInfo>().GetWorkPlace();
+        if (building is Sawmill) state2 = new SM_SawmillWorker();
+        else if (building is Market) state2 = new SM_MerchantBuyer();
         else state2 = new SM_Work();
 
         State state3 = new SM_Leisure();

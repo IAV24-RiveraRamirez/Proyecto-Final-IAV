@@ -16,13 +16,21 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 84a997336e1bf1649b568a6a601da494, type: 2}
+    - target: {fileID: 5582841237035185818, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: m_Name
+      value: NPCMarketPlace
+      objectReference: {fileID: 0}
+    - target: {fileID: 7812830083256255433, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.54
       objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.z
@@ -58,29 +66,36 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4082308568523484365, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+    - {fileID: 552584109397338759, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 5582841237035185818, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6031648091556434448}
+      addedObject: {fileID: 3833314061725784273}
   m_SourcePrefab: {fileID: 100100000, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
---- !u!1 &2008171895715748610 stripped
+--- !u!1 &4723432623192847092 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5582841237035185818, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
   m_PrefabInstance: {fileID: 934281930760045678}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6031648091556434448
+--- !u!114 &3833314061725784273
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2008171895715748610}
+  m_GameObject: {fileID: 4723432623192847092}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6282c985cafdf8242a882669af4045bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 4
-  type: 2
+  maxNpcs: 200
+  type: 3
+  sellPrices:
+    wood: 10
+    crafts: 20
+    prices:
+    - 10
+    - 20

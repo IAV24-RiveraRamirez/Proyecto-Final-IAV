@@ -246,11 +246,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1095947099388943471, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.7800001
+      value: -3.8
       objectReference: {fileID: 0}
     - target: {fileID: 1095947099388943471, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1095947099388943471, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_LocalPosition.z
@@ -288,16 +288,45 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_Sawmill Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3338998211233963813, guid: cce7775e4918fa74986689a485c4da32, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1095947099388943471, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8200220193922720657}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3073359227201035685, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7226675167856136078}
   m_SourcePrefab: {fileID: 100100000, guid: cce7775e4918fa74986689a485c4da32, type: 3}
 --- !u!4 &6397291842938413997 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1095947099388943471, guid: cce7775e4918fa74986689a485c4da32, type: 3}
   m_PrefabInstance: {fileID: 6337172833976434626}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &9031101481865388647 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3073359227201035685, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+  m_PrefabInstance: {fileID: 6337172833976434626}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7226675167856136078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9031101481865388647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f190a0b70209b242b9bcccf659d621e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxNpcs: 2
+  type: 1
+  woodText: {fileID: 2491652918615801394}
+  maxWoodStored: 100

@@ -8,6 +8,10 @@ public class House : NPCBuilding
 
     public int numSpawnedNPC = 0;
 
+    int numNPCsToSpawn = -1;
+
+    public void SetNPCsToSpawn(int num) {  numNPCsToSpawn = num; }
+
     protected override void Start()
     {
         base.Start();
@@ -15,18 +19,19 @@ public class House : NPCBuilding
         if (!spawnPoint) { spawnPoint = transform.GetChild(0).transform; }
         if (!spawnPoint) { Debug.LogError("'Spawnpoint' GameObject missing as child of House prefab"); }
     }
-    public void SpawnNPCs(int num)
+    public void SpawnNPCs()
     {
+        if (numNPCsToSpawn <= 0) numNPCsToSpawn = maxNpcs;
         if (!spawnPoint)
         {
             Debug.LogError("Missing reference to 'Spawnpoint' GameObject");
             return;
         }
-        numSpawnedNPC = num;
+        numSpawnedNPC = numNPCsToSpawn;
         GameObject npcPrefab = SimulationManager.Instance.GetNPCPrefab();
         float offset = 0.15f;
-        int n = num - num / 2;
-        for (int i = 0; i < num; i++)
+        int n = numNPCsToSpawn - numNPCsToSpawn / 2;
+        for (int i = 0; i < numNPCsToSpawn; i++)
         {
             Vector3 posOffset = transform.rotation * new Vector3(0, 0, offset * n);
             GameObject npc = Instantiate(npcPrefab, spawnPoint.position + posOffset, Quaternion.identity);

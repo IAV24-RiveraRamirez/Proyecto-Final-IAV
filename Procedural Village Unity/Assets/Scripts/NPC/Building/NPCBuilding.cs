@@ -27,7 +27,7 @@ public class NPCBuilding : MonoBehaviour
     public bool IsFull() { return full; }
 
     // Methods
-    public bool AddNPC(NPCInfo npc)
+    public virtual bool AddNPC(NPCInfo npc)
     {
         if (npcs.Count < maxNpcs)
         {

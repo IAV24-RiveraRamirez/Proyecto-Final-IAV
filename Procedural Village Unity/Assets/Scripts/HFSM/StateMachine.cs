@@ -13,14 +13,11 @@ public abstract class StateMachine : State
 
     string lastTransitionID = "";
 
-    public StateMachine()
-    {
-        blackboard = new Blackboard();
-    }
-
     public override void Init(GameObject g, StateMachine fsm)
     {
         base.Init(g, fsm);
+        if (this.fsm == this) blackboard = new Blackboard();
+        else blackboard = this.fsm.blackboard;
     }
 
     public void StartMachine(State initial)

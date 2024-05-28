@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 public class SimulationManager : MonoBehaviour
 {
@@ -71,8 +70,6 @@ public class SimulationManager : MonoBehaviour
     [Tooltip("Time when morning, afternoon and evening start (Range 0-23)")]
     [SerializeField] Day squedule;
 
-
-
     private void OnValidate()
     {
         time = timeOfDay;
@@ -132,7 +129,7 @@ public class SimulationManager : MonoBehaviour
             npcBuildings.Add(type, new List<NPCBuilding>());
         }
 
-        if (type == NPCBuilding.BuildingType.WORK) avaliableWorkingPlaces.Add(building);
+        if (type == NPCBuilding.BuildingType.WORK || type == NPCBuilding.BuildingType.MARKET) avaliableWorkingPlaces.Add(building);
         else if (type == NPCBuilding.BuildingType.LEISURE) avaliableLeisurePlaces.Add(building);
 
         npcBuildings[type].Add(building);
@@ -148,20 +145,43 @@ public class SimulationManager : MonoBehaviour
 
         NPCBuilding newBuilding = null;
 
+        List<NPCBuilding> avaliableMarkets = new List<NPCBuilding>();
+
         float distance = float.PositiveInfinity;
         foreach (NPCBuilding building in buildings)
         {
+            if(type == NPCBuilding.BuildingType.WORK && building.GetBuildingType() == NPCBuilding.BuildingType.MARKET)
+            {
+                avaliableMarkets.Add(building);
+            }
             if ((building.transform.position - housePosition).magnitude < distance)
             {
+                distance = (building.transform.position - housePosition).magnitude;
                 newBuilding = building;
             }
         }
-
-        if (newBuilding.AddNPC(npc))
+        if(avaliableMarkets.Count == 0)
         {
+            if(NPCBuilding.BuildingType.MARKET != type && newBuilding.AddNPC(npc))
+            {
+                buildings.Remove(newBuilding);
+            }
+        }
+        else
+        {
+            distance = float.PositiveInfinity;
+            foreach (NPCBuilding building in avaliableMarkets)
+            {
+                if ((building.transform.position - housePosition).magnitude < distance)
+                {
+                    distance = (building.transform.position - housePosition).magnitude;
+                    newBuilding = building;
+                }
+            }
+
+            newBuilding.AddNPC(npc);
             buildings.Remove(newBuilding);
         }
-
         return newBuilding;
     }
 
@@ -186,10 +206,8 @@ public class SimulationManager : MonoBehaviour
 
         foreach(NPCBuilding building in npcBuildings[NPCBuilding.BuildingType.HOUSE])
         {
-            int maxNPCs = building.GetMaxNPCs();
-            int NPCsToSpawn = UnityEngine.Random.Range(1, maxNPCs + 1);
             House house = building as House;
-            house.SpawnNPCs(NPCsToSpawn);
+            house.SpawnNPCs();
         }
     }
 
