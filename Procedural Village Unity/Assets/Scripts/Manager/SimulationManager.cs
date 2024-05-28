@@ -71,6 +71,8 @@ public class SimulationManager : MonoBehaviour
     [Tooltip("Time when morning, afternoon and evening start (Range 0-23)")]
     [SerializeField] Day squedule;
 
+
+
     private void OnValidate()
     {
         time = timeOfDay;

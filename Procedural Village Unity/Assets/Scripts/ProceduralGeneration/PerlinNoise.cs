@@ -29,15 +29,24 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField]
     int housesToSpawn = 6;
     [SerializeField]
+    bool spawnWater = true;
+    [SerializeField]
+    bool randomizeOffset = true;
+    [SerializeField]
     GameObject water = null;
     [SerializeField]
-    List<GameObject> buildings = null;
+    GameObject residentialBuilding = null;
+    [SerializeField]
+    GameObject workBuilding = null;
+    [SerializeField]
+    GameObject leisureBuilding = null;
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
     int houseSpace = 6; //El tamaño de terreno que aplana una casa 
-    [SerializeField]
-    bool spawnWater = true;
+    int numOfHabs = 0; //El número de habitantes de la aldea
+    int workCapacity = 0; //La capacidad de las zonas de trabajo de la aldea
+    int leisureCapacity = 0; //La capacidad de las zonas de ocio de la aldea
 
     float[,] heights;
     Terrain terrain;
@@ -55,9 +64,12 @@ public class PerlinNoise : MonoBehaviour
             else width = height;
         }
 
-        //(Opcional) Aleatoriza la generación
-        offsetX = UnityEngine.Random.Range(0f, 10000f);
-        offsetY = UnityEngine.Random.Range(0f, 10000f);
+        if (randomizeOffset)
+        {
+            //(Opcional) Aleatoriza la generación
+            offsetX = UnityEngine.Random.Range(0f, 10000f);
+            offsetY = UnityEngine.Random.Range(0f, 10000f);
+        }
 
         perlinGenerator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
 
@@ -70,7 +82,7 @@ public class PerlinNoise : MonoBehaviour
             GameObject waterRef = GameObject.Instantiate(water, spawnPosition, Quaternion.identity);
             waterRef.transform.localScale = new Vector3(width/2, 1, width/2);
         }
-        structuresGenerator = new StructuresGenerator(width);
+        structuresGenerator = new StructuresGenerator(width, houseSpace);
         StartCoroutine(findStartPosition());
 
         cameraRef = GameObject.Find("Main Camera");//Se puede hacer mejor
@@ -115,16 +127,15 @@ public class PerlinNoise : MonoBehaviour
                 maxVillageSize = Mathf.Max(maxVillageSize, Vector3.Distance(center, v));
             }
             maxVillageSize *= 2f; //Lo agrandamos para asegurar que llega
-            Debug.LogWarning("Hola: " + maxVillageSize + " " + center);
             CreateNavMesh(maxVillageSize, center);
         }
     }
 
     void PlaceBuilding() //Allana el terreno donde está el edificio colocado
     {
-        buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace / 2 +1, width - (houseSpace / 2) + 1); //Comprobamos que la casa tenga espacio para aplanar el terreno
-        buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace / 2 +1, width - (houseSpace / 2) + 1);
-        GameObject.Instantiate(buildings[UnityEngine.Random.Range(0, buildings.Count)],buildingPosition, Quaternion.identity);
+        //buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace + 1, width - (houseSpace + 1)); //Comprobamos que la casa tenga espacio para aplanar el terreno
+        //buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace + 1, width - (houseSpace + 1));
+        ChooseHouse();
         Vector3 initialPos = new Vector3(buildingPosition.z - (houseSpace / 2), buildingPosition.y, buildingPosition.x - (houseSpace / 2));
         float initialHeight = heights[(int)buildingPosition.z, (int)buildingPosition.x];
         for (int x = 0; x <= houseSpace; ++x)
@@ -145,6 +156,26 @@ public class PerlinNoise : MonoBehaviour
             }
         }
         terrain.terrainData.SetHeights(0, 0, heights);
+    }
+
+    void ChooseHouse() //generador de casas en base a la información de la aldea
+    {
+        GameObject buildingGO;
+        if (numOfHabs == 0 || (numOfHabs < workCapacity && residentialBuilding.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs <= workCapacity))
+        {
+            buildingGO = GameObject.Instantiate(residentialBuilding, buildingPosition, Quaternion.identity);
+            numOfHabs += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+        }
+        else if (workCapacity < numOfHabs || (residentialBuilding.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity*1.5 >= workCapacity))
+        {
+            buildingGO = GameObject.Instantiate(workBuilding, buildingPosition, Quaternion.identity);
+            workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+        }
+        else
+        {
+            buildingGO = GameObject.Instantiate(leisureBuilding, buildingPosition, Quaternion.identity);
+            leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+        }
     }
 
     void CreateNavMesh(float maxDimension, Vector3 center) //Crea la malla de navegación de la IA
