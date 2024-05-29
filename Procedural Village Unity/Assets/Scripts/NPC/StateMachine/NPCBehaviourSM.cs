@@ -21,13 +21,19 @@ class NPCBaseSM : StateMachine
 
         NPCBuilding building = gameObject.GetComponent<NPCInfo>().GetWorkPlace();
         if (building is Sawmill) state2 = new SM_SawmillWorker();
+        else if(building is WoodShop) state2 = new SM_Carpenter();
         else if (building is Market) state2 = new SM_MerchantBuyer();
-        else state2 = new SM_Work();
 
         State state3 = new SM_Leisure();
 
-        state1.AddTransition(new T_Morning(state2));
-        state2.AddTransition(new T_Afternoon(state3));
+        state1.AddTransition(new T_HasToWork(state2));
+        state1.AddTransition(new T_LeisureTimeArrived(state3));
+
+        state2.AddTransition(new T_LeisureTimeArrived(state3));
+        state2.AddTransition(new T_WorkDayEnded(state3));
+        state2.AddTransition(new T_Evening(state1));
+
+        state3.AddTransition(new T_HasToWork(state2));
         state3.AddTransition(new T_Evening(state1));
 
         AddState(state1).AddState(state2).AddState(state3);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SM_MerchantBuyer : StateMachine
+public class SM_MerchantBuyer : SM_Work
 {
     public override string ID()
     {
@@ -14,10 +14,12 @@ public class SM_MerchantBuyer : StateMachine
         base.Init(g, fsm);
 
         NPCInfo info = gameObject.GetComponent<NPCInfo>();
+        info.SetWorkingPeriod(SimulationManager.TimePeriods.MORNING);
+
         NPCBuilding market = info.GetMarketPlace();
 
         State state1 = new S_ToFixedDestination(market.gameObject);
-        State state2 = new S_BuyGoods();
+        State state2 = new S_AttendShop();
 
         state1.AddTransition(new T_ReachDestination(state2, 0.2f));
 

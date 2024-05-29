@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class T_WoodSold : Transition
+public class T_WorkDayEnded : Transition
 {
-    public T_WoodSold(State nextState) : base(nextState)
+    public T_WorkDayEnded(State nextState) : base(nextState)
     {
     }
 
     public override bool Check()
     {
-        return fsm.blackboard.Get("Wood", typeof(int)) == null;
+        return (bool)fsm.blackboard.Get("WorkDayEnded", typeof(bool));
     }
 
     public override void Enter()
@@ -25,6 +25,6 @@ public class T_WoodSold : Transition
 
     public override string ID()
     {
-        return "Wood was sold";
+        return "Work Day Ended";
     }
 }

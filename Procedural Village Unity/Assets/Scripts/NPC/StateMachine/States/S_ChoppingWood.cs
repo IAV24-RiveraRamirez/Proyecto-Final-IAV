@@ -21,6 +21,11 @@ public class S_ChoppingWood : State
 
     public override void Enter()
     {
+        object obj = fsm.blackboard.Get("Craft_ItemsCrafted", typeof(int));
+        if (obj == null)
+        {
+            fsm.blackboard.Set("Craft_ItemsCrafted", typeof(int), 0);
+        }
         info = gameObject.GetComponent<NPCInfo>();
     }
 

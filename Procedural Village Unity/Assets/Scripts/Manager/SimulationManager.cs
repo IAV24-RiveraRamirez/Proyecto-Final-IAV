@@ -120,6 +120,16 @@ public class SimulationManager : MonoBehaviour
         }
     }
 
+    public void SetUpTemporalMarket(NPCBuilding market)
+    {
+        npcBuildings[NPCBuilding.BuildingType.MARKET].Add(market);
+    }
+
+    public void RemoveTemporalMarket(NPCBuilding market) 
+    {
+        npcBuildings[NPCBuilding.BuildingType.MARKET].Remove(market);
+    }
+
     public void AddBuilding(NPCBuilding building)
     {
         NPCBuilding.BuildingType type = building.GetBuildingType();
