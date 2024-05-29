@@ -15,18 +15,16 @@ using UnityEngine.UIElements;
 public class PerlinNoise : MonoBehaviour
 {
     //Para que funcione bien, el ancho y el alto tienen que ser potencias de 2
-    [SerializeField]
-    int width = 256;
-    [SerializeField]
-    int height = 256;
+    [SerializeField, Range(2, 1024)]
+    int dimensions = 256;
     //Altura del terreno
-    [SerializeField]
+    [SerializeField, Range(0, 100)]
     int depth = 20;
-    [SerializeField]
+    [SerializeField, Range(1, 50)]
     int numOctaves = 15;
-    [SerializeField]
+    [SerializeField, Min(20)]
     float scale = 10f;
-    [SerializeField]
+    [SerializeField, Min(1)]
     int housesToSpawn = 6;
     [SerializeField]
     bool spawnWater = true;
@@ -58,11 +56,6 @@ public class PerlinNoise : MonoBehaviour
 
     void Start()
     {
-        if (width != height) //Para hacer el mapa cuadrado
-        {
-            if (width > height) height = width;
-            else width = height;
-        }
 
         if (randomizeOffset)
         {
@@ -70,19 +63,21 @@ public class PerlinNoise : MonoBehaviour
             offsetX = UnityEngine.Random.Range(0f, 10000f);
             offsetY = UnityEngine.Random.Range(0f, 10000f);
         }
-
-        perlinGenerator = new PerlinNoiseGenerator(numOctaves, scale, offsetX, offsetY);
+        perlinGenerator = gameObject.AddComponent<PerlinNoiseGenerator>();
+        perlinGenerator.setValues(numOctaves, scale, offsetX, offsetY);
 
         terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
 
         if (spawnWater && water != null) //Generación de agua
         {
-            Vector3 spawnPosition = new Vector3(gameObject.transform.position.x + (width / 2), gameObject.transform.position.y + 1, gameObject.transform.position.z + (height / 2));
+            Vector3 spawnPosition = new Vector3(gameObject.transform.position.x + (dimensions / 2), gameObject.transform.position.y + 1, gameObject.transform.position.z + (dimensions / 2));
             GameObject waterRef = GameObject.Instantiate(water, spawnPosition, Quaternion.identity);
-            waterRef.transform.localScale = new Vector3(width/2, 1, width/2);
+            waterRef.transform.localScale = new Vector3(dimensions / 2, 1, dimensions / 2);
         }
-        structuresGenerator = new StructuresGenerator(width, houseSpace);
+        structuresGenerator = gameObject.GetComponent<StructuresGenerator>();
+        structuresGenerator.setValues(dimensions, houseSpace);
+
         StartCoroutine(findStartPosition());
 
         cameraRef = GameObject.Find("Main Camera");//Se puede hacer mejor
@@ -100,7 +95,7 @@ public class PerlinNoise : MonoBehaviour
     IEnumerator findStartPosition()
     {
         yield return new WaitForNextFrameUnit(); //Esperamos porque si no los raycast no detectan el agua
-        if (structuresGenerator.findStartSpot(ref buildingPosition))
+        if (structuresGenerator.findStartSpot(ref buildingPosition, heights))
         {
             List<Vector3> places = new List<Vector3>();
             Vector3 originPoint = buildingPosition;
@@ -112,7 +107,7 @@ public class PerlinNoise : MonoBehaviour
             
             for (int i = 0; i < housesToSpawn-1; i++)
             {
-                if (structuresGenerator.findNearSpots(ref buildingPosition))
+                if (structuresGenerator.findNearSpots(ref buildingPosition, originPoint))
                 {
                     PlaceBuilding();
                     center += buildingPosition;
@@ -133,8 +128,6 @@ public class PerlinNoise : MonoBehaviour
 
     void PlaceBuilding() //Allana el terreno donde está el edificio colocado
     {
-        //buildingPosition.x = Mathf.Clamp(buildingPosition.x, houseSpace + 1, width - (houseSpace + 1)); //Comprobamos que la casa tenga espacio para aplanar el terreno
-        //buildingPosition.z = Mathf.Clamp(buildingPosition.z, houseSpace + 1, width - (houseSpace + 1));
         ChooseHouse();
         Vector3 initialPos = new Vector3(buildingPosition.z - (houseSpace / 2), buildingPosition.y, buildingPosition.x - (houseSpace / 2));
         float initialHeight = heights[(int)buildingPosition.z, (int)buildingPosition.x];
@@ -188,18 +181,18 @@ public class PerlinNoise : MonoBehaviour
     }
     TerrainData GenerateTerrain(TerrainData terrainData)
     {
-        terrainData.heightmapResolution = width + 1;
-        terrainData.size = new Vector3(width, depth, height);
+        terrainData.heightmapResolution = dimensions + 1;
+        terrainData.size = new Vector3(dimensions, depth, dimensions);
         terrainData.SetHeights(0, 0, GenerateHeights());
         return terrainData;
     }
 
     float[,] GenerateHeights()
     {
-        heights = new float[width, height];
-        for (int x = 0; x < width; ++x)
+        heights = new float[dimensions, dimensions];
+        for (int x = 0; x < dimensions; ++x)
         {
-            for (int y = 0; y < height; ++y)
+            for (int y = 0; y < dimensions; ++y)
             {
                 heights[x, y] = perlinGenerator.GetValue(x,y); //Calcula el valor de Perlin en un punto dado
                 //heights[x, y] = CalculateHeight(x, y);
@@ -210,8 +203,8 @@ public class PerlinNoise : MonoBehaviour
 
     float CalculateHeight(int x, int y) //Método que usa el Perlin de Unity
     {
-        float xCoor = (float)x / width * scale + offsetX;
-        float yCoor = (float)y / height * scale + offsetY;
+        float xCoor = (float)x / dimensions * scale + offsetX;
+        float yCoor = (float)y / dimensions * scale + offsetY;
 
         return Mathf.PerlinNoise(xCoor, yCoor);
     }

@@ -9,7 +9,7 @@ public class PerlinNoiseGenerator : MonoBehaviour
 
     int numWeights;
     float scale;
-    public PerlinNoiseGenerator(int nWeights, float Scale, float offsetX, float offsetY)
+    public void setValues(int nWeights, float Scale, float offsetX, float offsetY)
     {
         numWeights = nWeights; //Número de "capas" que tendrá el ruido
         scale = Scale; //Escala, sería como decir el tamaño de las celdas

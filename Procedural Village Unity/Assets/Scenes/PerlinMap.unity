@@ -196,6 +196,7 @@ GameObject:
   - component: {fileID: 282803991}
   - component: {fileID: 282803990}
   - component: {fileID: 282803989}
+  - component: {fileID: 282803993}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Terrain
@@ -215,14 +216,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17cd4dec805142e48836724b1b994566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 512
-  height: 0
+  dimensions: 512
   depth: 30
   numOctaves: 10
   scale: 50
-  housesToSpawn: 50
-  spawnWater: 0
-  randomizeOffset: 0
+  housesToSpawn: 100
+  spawnWater: 1
+  randomizeOffset: 1
   water: {fileID: 8175967659044370911, guid: d8630c95f9a48b845b7ff9c7131edb50, type: 3}
   residentialBuilding: {fileID: 3567311589662379801, guid: 959d806d21bcaf14c9dacb3cb4808aff, type: 3}
   workBuilding: {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
@@ -302,6 +302,22 @@ Transform:
   - {fileID: 535168692}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &282803993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 282803988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 883ab7c268726424b8ae6379cbb543b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MAX_NUM_TEST: 400
+  MAX_ANGLE_TOLERANCE: 20
+  MAX_HEIGHT_DIFF_TOLERANCE: 3
+  MAX_VILLAGE_SEPARATION: 20
 --- !u!1 &535168691
 GameObject:
   m_ObjectHideFlags: 0
