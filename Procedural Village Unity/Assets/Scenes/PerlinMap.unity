@@ -221,12 +221,42 @@ MonoBehaviour:
   numOctaves: 10
   scale: 50
   housesToSpawn: 100
-  spawnWater: 1
+  spawnWater: 0
   randomizeOffset: 1
   water: {fileID: 8175967659044370911, guid: d8630c95f9a48b845b7ff9c7131edb50, type: 3}
   residentialBuilding: {fileID: 3567311589662379801, guid: 959d806d21bcaf14c9dacb3cb4808aff, type: 3}
   workBuilding: {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
   leisureBuilding: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+  regionsParameters:
+  - Name: Sand
+    Height: 0.05
+    color: {r: 0.764151, g: 0.5812334, b: 0.16220188, a: 0}
+  - Name: Green1
+    Height: 0.2
+    color: {r: 0.057376157, g: 0.49056602, b: 0, a: 0}
+  - Name: Green2
+    Height: 0.35
+    color: {r: 0.038650773, g: 0.31132078, b: 0.0014684978, a: 0}
+  - Name: Mountain
+    Height: 0.5
+    color: {r: 0.21698111, g: 0.10093783, b: 0, a: 0}
+  - Name: MountainRocks
+    Height: 0.7
+    color: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
+  - Name: Snow
+    Height: 0.8
+    color: {r: 1, g: 1, b: 1, a: 0}
+  environmentAssets:
+  - {fileID: 188142, guid: 24b2d91aeeaf10d4186457c3595d0528, type: 3}
+  - {fileID: 150984, guid: 6f47c06db541e84489bcc3e2ab18830e, type: 3}
+  - {fileID: 109260, guid: 3e5dcb74503b12147b1548ad6ed38875, type: 3}
+  - {fileID: 194248, guid: 7a5f88a712b3f694ba4b9e8adf8df123, type: 3}
+  - {fileID: 178346, guid: aeb91a108a22a774cbc6f1ee2639342e, type: 3}
+  - {fileID: 172902, guid: 2ecb11c1607cc484faf50abc8a375258, type: 3}
+  - {fileID: 189478, guid: 21fe361e82c08e54b8a267303d3f0fc5, type: 3}
+  - {fileID: 129970, guid: 270831b068c0a074f89e316bd92372a4, type: 3}
+  - {fileID: 107716, guid: 7bd6629adca0e514f82d999d076ff30c, type: 3}
+  - {fileID: 174522, guid: 95f5524a950978c45a78becde27e894a, type: 3}
 --- !u!154 &282803990
 TerrainCollider:
   m_ObjectHideFlags: 0
@@ -315,9 +345,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MAX_NUM_TEST: 400
-  MAX_ANGLE_TOLERANCE: 20
-  MAX_HEIGHT_DIFF_TOLERANCE: 3
+  MAX_HOUSE_ANGLE_TOLERANCE: 15
+  MAX_HOUSE_HEIGHT_DIFF_TOLERANCE: 3
   MAX_VILLAGE_SEPARATION: 20
+  MAX_TREE_HEIGHT: 10
+  MAX_TREE_ANGLE_TOLERANCE: 30
+  TREE_GENERATION_INTERVAL: 2.5
+  MIN_TREE_VALUE_GENERATOR: 0.6
 --- !u!1 &535168691
 GameObject:
   m_ObjectHideFlags: 0

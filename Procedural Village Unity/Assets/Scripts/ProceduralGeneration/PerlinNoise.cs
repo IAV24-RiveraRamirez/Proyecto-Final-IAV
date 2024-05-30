@@ -1,16 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
 using Unity.AI.Navigation;
 using Unity.VisualScripting;
-using Unity.VisualScripting.Dependencies.Sqlite;
-using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UIElements;
 
 public class PerlinNoise : MonoBehaviour
 {
@@ -38,6 +31,11 @@ public class PerlinNoise : MonoBehaviour
     GameObject workBuilding = null;
     [SerializeField]
     GameObject leisureBuilding = null;
+    [SerializeField]
+    TerrainRegions[] regionsParameters;
+    [SerializeField]
+    GameObject[] environmentAssets;
+
     //Offset del perlin, se usa principalmente para aleatorizar más el resultado
     float offsetX;
     float offsetY;
@@ -53,6 +51,14 @@ public class PerlinNoise : MonoBehaviour
     Vector3 buildingPosition;
     GameObject cameraRef;
     Vector3 cameraPosition;
+
+    [System.Serializable]
+    public struct TerrainRegions
+    {
+        public string Name;
+        public float Height;
+        public Color color;
+    }
 
     void Start()
     {
@@ -123,6 +129,12 @@ public class PerlinNoise : MonoBehaviour
             }
             maxVillageSize *= 2f; //Lo agrandamos para asegurar que llega
             CreateNavMesh(maxVillageSize, center);
+
+            terrain.terrainData.terrainLayers[0].tileSize = new Vector2(dimensions, dimensions);
+            if (!spawnWater && regionsParameters.Length >= 2) regionsParameters[0] = regionsParameters[1];
+            terrain.terrainData.terrainLayers[0].diffuseTexture = CreateDynamicTerrainTexture(); //Creación de textura adaptada al terreno
+
+            structuresGenerator.spawnEnvironmentAssets(ref environmentAssets, dimensions, scale);
         }
     }
 
@@ -207,6 +219,29 @@ public class PerlinNoise : MonoBehaviour
         float yCoor = (float)y / dimensions * scale + offsetY;
 
         return Mathf.PerlinNoise(xCoor, yCoor);
+    }
+
+    Texture2D CreateDynamicTerrainTexture() //Crea una textura dinámica según la altura
+    {
+        Texture2D texture = new Texture2D(dimensions, dimensions);
+        for(int x = 0; x < dimensions; ++x)
+        {
+            for(int y = 0; y < dimensions; ++y)
+            {
+                float val = heights[y, x];
+
+                foreach(TerrainRegions r in regionsParameters)
+                {
+                    if(val <= r.Height)
+                    {
+                        texture.SetPixel(x, y, r.color);
+                        break;
+                    } 
+                }
+            }
+        }
+        texture.Apply(); //Método necesario para aplicar los cambios a la textura
+        return texture;
     }
 }
      
