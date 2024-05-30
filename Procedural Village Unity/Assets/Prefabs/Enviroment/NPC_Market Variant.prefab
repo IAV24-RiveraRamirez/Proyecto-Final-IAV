@@ -91,11 +91,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6282c985cafdf8242a882669af4045bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 200
+  maxNpcs: 1
   type: 3
   sellPrices:
-    wood: 10
-    crafts: 20
+    wood: 0.5
+    crafts: 0
     prices:
-    - 10
-    - 20
+    - 0.5
+    - 0
+  buyPrices:
+    wood: 1.2
+    crafts: 0
+    prices:
+    - 1.2
+    - 0

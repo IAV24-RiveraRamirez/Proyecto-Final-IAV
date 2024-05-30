@@ -20,9 +20,10 @@ public class NPCInfo : MonoBehaviour
 
     SimulationManager.TimePeriods workingPeriod;
 
-    public bool ChangeMoney(float amount) { 
+    public bool ChangeMoney(float amount, bool useSavings = false) {
+        if (useSavings) savings = 0;
         money += amount;
-        if (money < savings)
+        if (amount < 0 && money < savings)
         {
             money -= amount;
             return false;

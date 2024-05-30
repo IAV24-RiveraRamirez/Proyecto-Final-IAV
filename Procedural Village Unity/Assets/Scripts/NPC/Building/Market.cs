@@ -136,7 +136,7 @@ public class Market : NPCBuilding
             if(IsItemAvaliable(item, amount))
             {
                 float money = buyPrices.prices[(int)item] * amount;
-                bool hasMoney = client.ChangeMoney(-money);
+                bool hasMoney = client.ChangeMoney(-money, true);
                 result = BuyRequestOutput.ITEM_BOUGHT;
                 if (!hasMoney)
                 {
@@ -155,11 +155,13 @@ public class Market : NPCBuilding
             {
                 client.SetLastBuyResult(result);
                 client = null;
+                processingRequest = false;
                 result = BuyRequestOutput.SHOP_HAS_NO_ITEM;
             }
         }
         else
         {
+            processingRequest = false;
             result = BuyRequestOutput.NO_CLIENT;
         }
 

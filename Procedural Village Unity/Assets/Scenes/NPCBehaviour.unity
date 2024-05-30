@@ -15,12 +15,12 @@ RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
   m_Fog: 0
-  m_FogColor: {r: 0.66663843, g: 0.52185446, b: 0.24527255, a: 1}
+  m_FogColor: {r: 0.8394031, g: 0.82593364, b: 0.6049286, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.49999154, g: 0.5465027, b: 0.69809556, a: 1}
+  m_AmbientSkyColor: {r: 0.74998856, g: 0.72367644, b: 0.6726334, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311843, g: 0.38073805, b: 0.35872295, a: 1}
+  m_IndirectSpecularColor: {r: 0.44824493, g: 0.49827206, b: 0.57558256, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -213,21 +213,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7226675167856136078, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
-      propertyPath: maxNpcs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7420885632843486470, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8765315713094672615, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
-      propertyPath: maxNpcs
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 7159536228113446311, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
-    - {fileID: 8765315713094672615, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -626,7 +612,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858122703}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.00000011424161, y: 0.9961947, z: 0.0000013057867, w: 0.087155804}
+  m_LocalRotation: {x: 0.033353083, y: 0.9203639, z: -0.38122723, w: 0.080521464}
   m_LocalPosition: {x: 0.9999999, y: 1.8099995, z: -2.58}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1297,7 +1283,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 824592460855639996, guid: 60d109779deb27540ab3465c57dea0dd, type: 3}
       propertyPath: timeRate
-      value: 0.0002
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 824592460855639996, guid: 60d109779deb27540ab3465c57dea0dd, type: 3}
       propertyPath: npcPrefab
@@ -1305,7 +1291,7 @@ PrefabInstance:
       objectReference: {fileID: 4921161105787374915, guid: 5866b9f6883b7354f86330158d17c9da, type: 3}
     - target: {fileID: 824592460855639996, guid: 60d109779deb27540ab3465c57dea0dd, type: 3}
       propertyPath: timeOfDay
-      value: 5.99999
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 824592460855639996, guid: 60d109779deb27540ab3465c57dea0dd, type: 3}
       propertyPath: squedule.night
@@ -1509,34 +1495,6 @@ PrefabInstance:
     - target: {fileID: 2008171895715748610, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
       propertyPath: m_Name
       value: NPC_Market
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: maxNpcs
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: buyPrices.wood
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: sellPrices.wood
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: sellPrices.crafts
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: buyPrices.prices.Array.data[0]
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: sellPrices.prices.Array.data[0]
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3833314061725784273, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
-      propertyPath: sellPrices.prices.Array.data[1]
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8388917637752904196, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
       propertyPath: m_LocalPosition.x

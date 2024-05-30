@@ -113,10 +113,10 @@ MonoBehaviour:
     - 0
   buyPrices:
     wood: 0
-    crafts: 10
+    crafts: 12
     prices:
     - 0
-    - 10
+    - 12
   woodText: {fileID: 1676739597756457925}
   maxWoodStored: 100
   woodPerCraft: 5
