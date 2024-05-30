@@ -44,6 +44,8 @@ public class PerlinNoise : MonoBehaviour
     int workCapacity = 0; //La capacidad de las zonas de trabajo de la aldea
     int leisureCapacity = 0; //La capacidad de las zonas de ocio de la aldea
 
+    bool startCameraMovement = false;
+
     float[,] heights;
     Terrain terrain;
     PerlinNoiseGenerator perlinGenerator;
@@ -51,6 +53,7 @@ public class PerlinNoise : MonoBehaviour
     Vector3 buildingPosition;
     GameObject cameraRef;
     Vector3 cameraPosition;
+    SettingsManager settingsManager;
 
     [System.Serializable]
     public struct TerrainRegions
@@ -60,8 +63,20 @@ public class PerlinNoise : MonoBehaviour
         public Color color;
     }
 
+    void setValues() //Ajusta sus valores a los que tenga el manager 
+    {
+        depth = settingsManager.terrainDepth;
+        numOctaves = settingsManager.nOctaves;
+        scale = settingsManager.perlinScale;
+        housesToSpawn = settingsManager.nHouses;
+        spawnWater = settingsManager.toogleWater;
+        randomizeOffset = settingsManager.randomOffsets;
+    }
+
     void Start()
     {
+        settingsManager = GameObject.Find("SettingsManager").GetComponent<SettingsManager>();
+        if (settingsManager) setValues();
 
         if (randomizeOffset)
         {
@@ -84,7 +99,7 @@ public class PerlinNoise : MonoBehaviour
         structuresGenerator = gameObject.GetComponent<StructuresGenerator>();
         structuresGenerator.setValues(dimensions, houseSpace);
 
-        StartCoroutine(findStartPosition());
+        StartCoroutine(StartGeneration());
 
         cameraRef = GameObject.Find("Main Camera");//Se puede hacer mejor
         if(cameraRef) cameraPosition = cameraRef.transform.position;
@@ -92,13 +107,13 @@ public class PerlinNoise : MonoBehaviour
 
     private void Update()
     {
-        if(cameraRef)
+        if(cameraRef && startCameraMovement)
         {
             cameraRef.transform.position = Vector3.Lerp(cameraRef.transform.position, cameraPosition, Time.deltaTime); //Movimiento de la cámara para apuntar hacia la aldea
         }
     }
 
-    IEnumerator findStartPosition()
+    IEnumerator StartGeneration()
     {
         yield return new WaitForNextFrameUnit(); //Esperamos porque si no los raycast no detectan el agua
         if (structuresGenerator.findStartSpot(ref buildingPosition, heights))
@@ -135,6 +150,10 @@ public class PerlinNoise : MonoBehaviour
             terrain.terrainData.terrainLayers[0].diffuseTexture = CreateDynamicTerrainTexture(); //Creación de textura adaptada al terreno
 
             structuresGenerator.spawnEnvironmentAssets(ref environmentAssets, dimensions, scale);
+
+            Debug.LogWarning("Terniné");
+            yield return new WaitForSeconds(1);
+            startCameraMovement = true;
         }
     }
 
