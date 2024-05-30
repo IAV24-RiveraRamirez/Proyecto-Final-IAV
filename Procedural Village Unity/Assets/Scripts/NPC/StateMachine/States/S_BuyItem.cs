@@ -39,7 +39,7 @@ public class S_BuyItem : State
                 info.SetLastBuyResult(Market.BuyRequestOutput.SHOP_HAS_NO_ITEM);
                 return;
             }
-            amount = Random.Range(max, max + 1);
+            amount = Random.Range(1, max + 1);
             Debug.Log("Buying: " + item + " x " + amount + "/" + max);
         }
         market.AddNPCToQueue(info, item, amount, Market.Request.RequestType.BUY);
