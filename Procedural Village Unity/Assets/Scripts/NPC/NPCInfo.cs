@@ -13,14 +13,16 @@ public class NPCInfo : MonoBehaviour
     NPCBuilding marketPlace = null;
 
     float money;
+    float savings = 0;
+    float lastMoneyNeeded = 0;
 
-    Market.BuyRequestOutput lastBuyingTry = Market.BuyRequestOutput.ALL_OK;
+    Market.BuyRequestOutput lastBuyingTry = Market.BuyRequestOutput.RESTING_STATE;
 
     SimulationManager.TimePeriods workingPeriod;
 
     public bool ChangeMoney(float amount) { 
         money += amount;
-        if (money < 0)
+        if (money < savings)
         {
             money -= amount;
             return false;
@@ -28,14 +30,10 @@ public class NPCInfo : MonoBehaviour
         else { return true; } 
     }
 
-    private void Update()
-    {
-        Debug.Log(gameObject.name + " " + workingPeriod.ToString());
-    }
-
     // Getters
     public Market.BuyRequestOutput GetLastBuyResult() { return lastBuyingTry; }
     public float GetMoney() { return money; }
+    public float GetLastMoneyNeeded() { return lastMoneyNeeded; }
     public House GetHouse() { return house; }
     public NPCBuilding GetWorkPlace() { return workingPlace; }
     public NPCBuilding GetLeisurePlace() { return leisurePlace; }
@@ -43,8 +41,17 @@ public class NPCInfo : MonoBehaviour
     public SimulationManager.TimePeriods GetWorkingPeriod() {  return workingPeriod; }
 
     // Setters
+    public void AddToSavings(float savings) { this.savings += savings; if (this.savings < 0) this.savings = 0; }
     public void SetHouse(House house) { this.house = house; }
-    public void SetLastBuyResult(Market.BuyRequestOutput lastBuyingTry) { this.lastBuyingTry = lastBuyingTry; }
+    public void SetLastBuyResult(Market.BuyRequestOutput lastBuyingTry, float moneyNeeded = 0) { 
+        this.lastBuyingTry = lastBuyingTry; 
+        
+        if(lastBuyingTry == Market.BuyRequestOutput.CLIENT_HAS_NO_MONEY)
+        {
+            lastMoneyNeeded = moneyNeeded;
+        }
+
+    }
     public void SetWorkPlace(NPCBuilding workingPlace) { this.workingPlace = workingPlace; }
     public void SetLeisurePlace(NPCBuilding leisurePlace) { this.leisurePlace = leisurePlace; }
     public void SetMarketPlace(NPCBuilding marketplace) { this.marketPlace = marketplace; }

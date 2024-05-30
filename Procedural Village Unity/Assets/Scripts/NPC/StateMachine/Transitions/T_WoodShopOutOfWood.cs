@@ -10,14 +10,13 @@ public class T_WoodShopOutOfWood : Transition
 
     public override bool Check()
     {
-        return (bool)fsm.blackboard.Get("Craft_GoRefill", typeof(bool));
+        return (bool)fsm.blackboard.Get("Craft_GoRefill", typeof(bool)) &&
+            !((int)fsm.blackboard.Get(Market.Item.WOOD.ToString(), typeof(int)) > 0);
     }
 
     public override void Enter()
     {
-        if((bool)fsm.blackboard.Get("Craft_GoRefill", typeof(bool))) {
-            fsm.blackboard.Set("Craft_GoRefill", typeof(bool), false);
-        }
+
     }
 
     public override void Exit()

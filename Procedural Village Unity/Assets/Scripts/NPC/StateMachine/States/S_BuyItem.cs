@@ -1,14 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class S_BuyItem : State
 {
+    public const string GET_RANDOM_AMOUNT = "GetRandomAmountFromShop";
+
     float lastMoney = 0;
     NPCInfo info;
     Market.Item item;
     string itemNameOnBlackboard;
+    int amount;
 
     public S_BuyItem(Market.Item item, string itemNameOnBlackboard)
     {
@@ -21,8 +25,24 @@ public class S_BuyItem : State
         info = gameObject.GetComponent<NPCInfo>();
         gameObject.GetComponent<NavMeshAgent>().isStopped = true;
 
-        Market market = info.GetMarketPlace() as Market;
-        market.AddNPCToQueue(info, item, (int)fsm.blackboard.Get(itemNameOnBlackboard, typeof(int)), Market.Request.RequestType.BUY);
+        Market market = null;
+        if (info.GetLeisurePlace() == null) market = info.GetMarketPlace() as Market;
+        else market = info.GetLeisurePlace() as Market;
+
+        amount = -1;
+        if (itemNameOnBlackboard != GET_RANDOM_AMOUNT) amount = (int)fsm.blackboard.Get(itemNameOnBlackboard, typeof(int));
+        else
+        {
+            int max = market.GetMaxItemAmount(item);
+            if (max == -2)
+            {
+                info.SetLastBuyResult(Market.BuyRequestOutput.SHOP_HAS_NO_ITEM);
+                return;
+            }
+            amount = Random.Range(max, max + 1);
+            Debug.Log("Buying: " + item + " x " + amount + "/" + max);
+        }
+        market.AddNPCToQueue(info, item, amount, Market.Request.RequestType.BUY);
         lastMoney = info.GetMoney();
     }
 
@@ -40,8 +60,8 @@ public class S_BuyItem : State
     {
         if (lastMoney > info.GetMoney())
         {
-            fsm.blackboard.Set(item.ToString(), typeof(int), (int)fsm.blackboard.Get(itemNameOnBlackboard, typeof(int)));
-            fsm.blackboard.Set(itemNameOnBlackboard, typeof(int), 0);
+            fsm.blackboard.Set(item.ToString(), typeof(int), amount);
+            if(itemNameOnBlackboard != GET_RANDOM_AMOUNT) fsm.blackboard.Set(itemNameOnBlackboard, typeof(int), 0);
         }
     }
 }

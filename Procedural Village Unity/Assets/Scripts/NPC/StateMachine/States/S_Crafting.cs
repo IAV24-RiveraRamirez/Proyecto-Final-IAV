@@ -22,7 +22,7 @@ public class S_Crafting : State
     void GetWork()
     {
         progress = woodShop.Work(info);
-        if(progress == null)
+        if(progress == null && !(bool)fsm.blackboard.Get("Craft_GoRefill", typeof(bool)))
         {
             bool goToRefill = woodShop.LeaveShopToRefill();
             if(goToRefill)

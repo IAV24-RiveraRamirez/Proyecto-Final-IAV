@@ -35,7 +35,7 @@ public class SM_Carpenter : SM_Work
 
         state3.AddTransition(new T_ReachDestination(state4, 3.0f));
 
-        state4.AddTransition(new T_ZeroUnitsOfItem(state1, "Craft_WoodAmount"));
+        state4.AddTransition(new T_ItemWasBought(state1));
         state4.AddTransition(new T_NotEnoughMoneyToBuyForWoodShop(state5));
         state4.AddTransition(new T_ShopHasNoItem(stopWorking));
 
@@ -43,11 +43,10 @@ public class SM_Carpenter : SM_Work
 
         state6.AddTransition(new T_WoodShopRefilled(state2));
 
-        AddState(state1).AddState(state2).AddState(state3).AddState(state4).AddState(state5).AddState(state6);
+        AddState(state1).AddState(state2).AddState(state3).AddState(state4).AddState(state5).AddState(state6).AddState(stopWorking);
 
         object obj = fsm.blackboard.Get("Craft_SellCrafts", typeof(bool));
         if (obj != null && (bool)obj == true) StartMachine(state5);
         else StartMachine(state1);
-
     }
 }

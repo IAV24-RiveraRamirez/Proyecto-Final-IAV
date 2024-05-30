@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Search;
 using UnityEngine;
 
 public class Market : NPCBuilding
@@ -46,7 +47,7 @@ public class Market : NPCBuilding
 
     // Enum
     public enum Item { WOOD, CRAFTS }
-    public enum BuyRequestOutput { ALL_OK, NO_CLIENT, CLIENT_HAS_NO_MONEY, SHOP_HAS_NO_ITEM }
+    public enum BuyRequestOutput { RESTING_STATE, ITEM_BOUGHT, NO_CLIENT, CLIENT_HAS_NO_MONEY, SHOP_HAS_NO_ITEM }
 
     // References 
     NPCInfo npcAttendingShop = null;
@@ -64,6 +65,12 @@ public class Market : NPCBuilding
     // Own Methods
     public void AddNPCToQueue(NPCInfo client, Item item, int amount, Request.RequestType type)
     {
+        if (amount == 0)
+        {
+            SimulationManager.Instance.RemoveTemporalMarket(this);
+            client.SetLastBuyResult(BuyRequestOutput.SHOP_HAS_NO_ITEM);
+            return;
+        }
         queue.Enqueue(new Request(client, item, amount, type));
     }
 
@@ -71,7 +78,7 @@ public class Market : NPCBuilding
     {
         if(itemAmount.ContainsKey(item))
         {
-            if (amount >= itemAmount[item] || itemAmount[item] == -1) return true;
+            if (amount <= itemAmount[item] || itemAmount[item] == -1) return true;
             else return false;
         }
         return false;
@@ -97,7 +104,8 @@ public class Market : NPCBuilding
         {
             itemAmount.Add(item, amount);
         }
-        else if (itemAmount[item] >= 0) itemAmount[item] += amount;
+        else if (itemAmount[item] > -1) itemAmount[item] += amount;
+        else if (itemAmount[item] == -1) itemAmount[item] = amount;
     }
 
     public void Buy(NPCInfo client, Item item, int amount)
@@ -122,22 +130,25 @@ public class Market : NPCBuilding
 
     public BuyRequestOutput GetMoneyFromClient(Item item, int amount)
     {
-        BuyRequestOutput result = BuyRequestOutput.ALL_OK;
+        BuyRequestOutput result = BuyRequestOutput.RESTING_STATE;
         if (client != null)
         {
             if(IsItemAvaliable(item, amount))
             {
-                bool hasMoney = client.ChangeMoney(-buyPrices.prices[(int)item] * amount);
+                float money = buyPrices.prices[(int)item] * amount;
+                bool hasMoney = client.ChangeMoney(-money);
+                result = BuyRequestOutput.ITEM_BOUGHT;
                 if (!hasMoney)
                 {
                     result = BuyRequestOutput.CLIENT_HAS_NO_MONEY;
                 }
                 else if (itemAmount[item] != -1) 
                 {
+                    npcAttendingShop.ChangeMoney(money);
                     itemAmount[item] -= amount;
                 }
                 processingRequest = false;
-                client.SetLastBuyResult(result);
+                client.SetLastBuyResult(result, money);
                 client = null;
             }
             else
@@ -181,6 +192,14 @@ public class Market : NPCBuilding
 
     public void SetNPCAttending(NPCInfo info) {
         npcAttendingShop = info;
+        if(info == null)
+        {
+            while(queue.Count > 0)
+            {
+                Request r = queue.Dequeue();
+                r.client.SetLastBuyResult(BuyRequestOutput.SHOP_HAS_NO_ITEM);
+            }
+        }
     }
 
     public NPCInfo GetNPCAttending() { return npcAttendingShop; }
@@ -191,21 +210,26 @@ public class Market : NPCBuilding
         buyPrices = new MarketPrices(buyPrices.wood, buyPrices.crafts);
     }
 
-    protected override void Start()
+    protected void SetUpAvaliableItems()
     {
-        maxNpcs = 1;
-        type = BuildingType.MARKET;
-        for(int i = 0; i < buyPrices.prices.Length; ++i)
+        for (int i = 0; i < buyPrices.prices.Length; ++i)
         {
             if (buyPrices.prices[i] > 0)
             {
                 itemAmount.Add((Item)i, -1); // -1 hay infinito
             }
         }
+    }
+
+    protected override void Start()
+    {
+        maxNpcs = 1;
+        type = BuildingType.MARKET;
+        SetUpAvaliableItems();
         base.Start();
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if(queue.Count > 0 && !processingRequest && npcAttendingShop)
         {

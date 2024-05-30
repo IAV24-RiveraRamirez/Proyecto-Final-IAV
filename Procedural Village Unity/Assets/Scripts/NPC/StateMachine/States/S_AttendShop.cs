@@ -27,7 +27,8 @@ public class S_AttendShop : State
 
     public override void Exit()
     {
-        market.SetNPCAttending(null);   
+        market.SetNPCAttending(null);
+        SimulationManager.Instance.RemoveTemporalMarket(market);
     }
 
     public override string ID()
@@ -65,9 +66,9 @@ public class S_AttendShop : State
                 Market.Item item = (Market.Item)fsm.blackboard.Get("Buy_Item", typeof(Market.Item));
                 int amount = (int)fsm.blackboard.Get("Buy_ItemAmout", typeof(int));
                 Market.BuyRequestOutput result = market.GetMoneyFromClient(item, amount);
-                if (result == Market.BuyRequestOutput.ALL_OK)
+                if (result == Market.BuyRequestOutput.ITEM_BOUGHT)
                 {
-                    fsm.blackboard.Set("Buy_Request", typeof(bool), false);
+                    Debug.Log("Se ha comprado: " + amount.ToString() + " de " + item.ToString());
                     timer = 0;
                 }
                 else
@@ -75,6 +76,7 @@ public class S_AttendShop : State
                     timer = 0;
                     Debug.Log(result.ToString());
                 }
+                fsm.blackboard.Set("Buy_Request", typeof(bool), false);
             }
         }
     }

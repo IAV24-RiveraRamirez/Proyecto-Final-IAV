@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class T_ShopHasNoItem : Transition
+public class T_MarketSelectedAsLeisure : Transition
 {
     NPCInfo info;
-    public T_ShopHasNoItem(State nextState) : base(nextState)
+    public T_MarketSelectedAsLeisure(State nextState) : base(nextState)
     {
     }
 
     public override bool Check()
     {
-        return info.GetLastBuyResult() == Market.BuyRequestOutput.SHOP_HAS_NO_ITEM;
+        return info.GetLeisurePlace() != null && info.GetLeisurePlace() is Market;
     }
 
     public override void Enter()
@@ -21,11 +21,11 @@ public class T_ShopHasNoItem : Transition
 
     public override void Exit()
     {
-        info.SetLastBuyResult(Market.BuyRequestOutput.RESTING_STATE);
+
     }
 
     public override string ID()
     {
-        return "Shop had no Item";
+        return "Market found as Leisure activity!";
     }
 }

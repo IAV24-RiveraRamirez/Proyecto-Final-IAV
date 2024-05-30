@@ -9,6 +9,7 @@ public class S_RefillWoodShop : State
         WoodShop shop = gameObject.GetComponent<NPCInfo>().GetWorkPlace() as WoodShop;
         shop.RefillShop((int)fsm.blackboard.Get(Market.Item.WOOD.ToString(), typeof(int)));
         fsm.blackboard.Set(Market.Item.WOOD.ToString(), typeof(int), 0);
+        fsm.blackboard.Set("Craft_GoRefill", typeof(bool), false);
     }
 
     public override void Exit()

@@ -75,6 +75,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1296193708356176742}
   m_SourcePrefab: {fileID: 100100000, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
+--- !u!114 &1676739597756457925 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2491652918615801394, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
+  m_PrefabInstance: {fileID: 3877837765893823991}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5225356537352241040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9031101481865388647, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
@@ -92,8 +103,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32a7bde8977f8584f95f9026fdabdbb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 4
-  type: 0
+  maxNpcs: 1
+  type: 1
   sellPrices:
     wood: 0
     crafts: 0
@@ -102,8 +113,10 @@ MonoBehaviour:
     - 0
   buyPrices:
     wood: 0
-    crafts: 25
-    prices: []
-  woodText: {fileID: 0}
+    crafts: 10
+    prices:
+    - 0
+    - 10
+  woodText: {fileID: 1676739597756457925}
   maxWoodStored: 100
-  woodPerCraft: 15
+  woodPerCraft: 5

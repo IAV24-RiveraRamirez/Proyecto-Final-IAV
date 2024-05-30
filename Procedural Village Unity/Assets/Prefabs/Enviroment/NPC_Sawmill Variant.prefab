@@ -326,7 +326,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f190a0b70209b242b9bcccf659d621e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 2
+  maxNpcs: 1
   type: 1
   woodText: {fileID: 2491652918615801394}
   maxWoodStored: 100

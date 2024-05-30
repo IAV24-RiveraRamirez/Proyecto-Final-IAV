@@ -115,6 +115,13 @@ public class WoodShop : Market
     {
         type = BuildingType.WORK;
         currentWood = maxWoodStored;
+        SetUpAvaliableItems();
         SimulationManager.Instance.AddBuilding(this);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        if (SimulationManager.Instance.GetCurrentPeriod() == SimulationManager.TimePeriods.EVENING) npcIsRefillingWood = false;
     }
 }

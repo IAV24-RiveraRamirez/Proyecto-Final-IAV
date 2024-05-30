@@ -2,16 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class T_ShopHasNoItem : Transition
+public class T_ItemWasBought : Transition
 {
     NPCInfo info;
-    public T_ShopHasNoItem(State nextState) : base(nextState)
+    public T_ItemWasBought(State nextState) : base(nextState)
     {
     }
 
     public override bool Check()
     {
-        return info.GetLastBuyResult() == Market.BuyRequestOutput.SHOP_HAS_NO_ITEM;
+        return info.GetLastBuyResult() == Market.BuyRequestOutput.ITEM_BOUGHT;
     }
 
     public override void Enter()
@@ -26,6 +26,6 @@ public class T_ShopHasNoItem : Transition
 
     public override string ID()
     {
-        return "Shop had no Item";
+        return "Item bought!";
     }
 }

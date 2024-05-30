@@ -122,12 +122,12 @@ public class SimulationManager : MonoBehaviour
 
     public void SetUpTemporalMarket(NPCBuilding market)
     {
-        npcBuildings[NPCBuilding.BuildingType.MARKET].Add(market);
+        avaliableLeisurePlaces.Add(market);
     }
 
     public void RemoveTemporalMarket(NPCBuilding market) 
     {
-        npcBuildings[NPCBuilding.BuildingType.MARKET].Remove(market);
+        avaliableLeisurePlaces.Remove(market);
     }
 
     public void AddBuilding(NPCBuilding building)
@@ -200,9 +200,9 @@ public class SimulationManager : MonoBehaviour
         return GetNewBuilding(npc, housePosition, NPCBuilding.BuildingType.WORK);
     }
 
-    public NPCBuilding GetNewLeisurePlace(NPCInfo npc, Vector3 housePosition)
+    public NPCBuilding GetLeisurePlace()
     {
-        return GetNewBuilding(npc, housePosition, NPCBuilding.BuildingType.LEISURE);
+        return avaliableLeisurePlaces[UnityEngine.Random.Range(0, avaliableLeisurePlaces.Count)];
     }
 
     public NPCBuilding GetNewMarketPlace(NPCInfo npc, Vector3 wokrplacePosition)

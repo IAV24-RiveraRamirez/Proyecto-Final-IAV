@@ -16,14 +16,16 @@ public class SM_SellCrafts : StateMachine
         object sell = fsm.blackboard.Get("Craft_SellCrafts", typeof(bool));
 
         NPCInfo info = g.GetComponent<NPCInfo>();
-        if(sell != null && (bool)sell) 
-            info.SetWorkingPeriod(SimulationManager.TimePeriods.AFTERNOON);
-
-        SimulationManager.Instance.SetUpTemporalMarket(info.GetWorkPlace());
-
         Market market = info.GetWorkPlace() as Market;
-        object obj = fsm.blackboard.Get("Craft_ItemsCrafted", typeof(int));
-        if(obj != null) market.AddItems(Market.Item.CRAFTS, (int)obj);
+        if(sell != null && (bool)sell)
+        {
+            info.SetWorkingPeriod(SimulationManager.TimePeriods.AFTERNOON);
+            object obj = fsm.blackboard.Get("Craft_ItemsCrafted", typeof(int));
+            if(obj != null && market.GetMaxItemAmount(Market.Item.CRAFTS) <= 0) 
+                market.AddItems(Market.Item.CRAFTS, (int)obj);
+            SimulationManager.Instance.SetUpTemporalMarket(info.GetWorkPlace());
+        }
+
         
         State state1 = new S_ToFixedDestination(info.GetWorkPlace().gameObject);
         State state2 = new S_AttendShop();

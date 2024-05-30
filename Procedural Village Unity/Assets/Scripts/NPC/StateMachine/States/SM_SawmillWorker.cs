@@ -17,7 +17,7 @@ public class SM_SawmillWorker : SM_Work
         info.SetWorkingPeriod(SimulationManager.TimePeriods.MORNING);
 
         State state1 = new S_ToFixedDestination(info.GetWorkPlace().gameObject);
-        State state2 = new S_ChoppingWood(0.5f, 30);
+        State state2 = new S_ChoppingWood(0.5f, 5);
         State state3 = new S_ToFixedDestination(info.GetMarketPlace().gameObject);
         State state4 = new S_SellItem(Market.Item.WOOD, "Wood");
 

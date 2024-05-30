@@ -11,7 +11,7 @@ public class T_RunOutOfCraftsToSell : Transition
 
     public override bool Check()
     {
-        return market.IsItemAvaliable(Market.Item.CRAFTS, 1);
+        return !market.IsItemAvaliable(Market.Item.CRAFTS, 1);
     }
 
     public override void Enter()

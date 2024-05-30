@@ -27,6 +27,7 @@ public class SM_Sleep : StateMachine
     public override void Exit()
     {
         Debug.Log("Stop Slepping");
+        fsm.blackboard.Set("WorkDayEnded", typeof(bool), false);
     }
 
     public override string ID()
