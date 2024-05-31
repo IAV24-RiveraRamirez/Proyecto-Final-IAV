@@ -62,6 +62,8 @@ public class PerlinNoise : MonoBehaviour
     SettingsManager settingsManager;
     GameObject expectedNextBuilding = null;
     List<GameObject> woodShopDependencies;
+    bool firstWorkPlace = true;
+    bool expectedLeisure = false;
 
     [System.Serializable]
     public struct TerrainRegions
@@ -215,65 +217,96 @@ public class PerlinNoise : MonoBehaviour
         }
         terrain.terrainData.SetHeights(0, 0, heights);
     }
-
-    void ChooseHouse() //generador de casas en base a la información de la aldea
+    void SpawnResidential()
     {
         GameObject buildingGO = null;
-        if (numOfHabs == 0 || numOfHabs < workCapacity)
+        if (numOfHabs == 0)
+        {
+            buildingGO = GameObject.Instantiate(residentialBuildings[0], buildingPosition, Quaternion.identity);
+            (buildingGO.GetComponentInChildren<NPCBuilding>() as House).SetNPCsToSpawn(2);
+            numOfHabs += 2;
+        }
+        else
         {
             foreach (GameObject b in residentialBuildings)
             {
-                if (b.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs <= workCapacity)
+                if (b.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs <= workCapacity || numOfHabs == 0)
                 {
                     buildingGO = GameObject.Instantiate(b, buildingPosition, Quaternion.identity);
-                    numOfHabs += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                    numOfHabs += (buildingGO.GetComponentInChildren<NPCBuilding>() as House).GetNPCsToSpawn();
                     break;
                 }
             }
         }
-        if (buildingGO != null) return;
-        if (workCapacity < numOfHabs || (residentialBuildings[residentialBuildings.Count - 1].GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity * 1.5 >= workCapacity))
+    }
+
+    void SpawnWorkPlace()
+    {
+        GameObject buildingGO;
+        if (expectedNextBuilding == sawMill)
         {
-            if(expectedNextBuilding == sawMill)
-            {
-                buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
-                workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
-                woodShopDependencies.Add(buildingGO);
-                expectedNextBuilding = market;
-            }
-            else
-            {
-                int random = UnityEngine.Random.Range(0, 101);
-                if (random <= 80)
-                {
-                    random = UnityEngine.Random.Range(0, workBuildings.Count);
-                    buildingGO = GameObject.Instantiate(workBuildings[random], buildingPosition, Quaternion.identity);
-                    workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
-                }
-                else
-                {
-                    buildingGO = GameObject.Instantiate(woodShop, buildingPosition, Quaternion.identity);
-                    workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
-                    woodShopDependencies.Add(buildingGO);
-                    expectedNextBuilding = sawMill;
-                }
-            }
+            buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
+            workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            woodShopDependencies.Add(buildingGO);
+            expectedNextBuilding = market;
         }
         else
         {
-            if(expectedNextBuilding == market)
+            int random = UnityEngine.Random.Range(0, 101);
+            if (random > 80 || firstWorkPlace)
             {
-                buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
-                leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
-                woodShopDependencies.Clear();
-                expectedNextBuilding = null;
+                buildingGO = GameObject.Instantiate(woodShop, buildingPosition, Quaternion.identity);
+                workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                woodShopDependencies.Add(buildingGO);
+                expectedNextBuilding = sawMill;
             }
             else
             {
-                int random = UnityEngine.Random.Range(0, leisureBuildings.Count);
-                buildingGO = GameObject.Instantiate(leisureBuildings[random], buildingPosition, Quaternion.identity);
-                leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                random = UnityEngine.Random.Range(0, workBuildings.Count);
+                buildingGO = GameObject.Instantiate(workBuildings[random], buildingPosition, Quaternion.identity);
+                workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
             }
+            firstWorkPlace = false;
+        }
+    }
+    void SpawnLeisurePlace()
+    {
+        GameObject buildingGO;
+        if (expectedNextBuilding == market)
+        {
+            buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
+            leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            woodShopDependencies.Clear();
+            expectedLeisure = true;
+            expectedNextBuilding = null;
+        }
+        else
+        {
+            int random = UnityEngine.Random.Range(0, leisureBuildings.Count);
+            buildingGO = GameObject.Instantiate(leisureBuildings[random], buildingPosition, Quaternion.identity);
+            leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            expectedLeisure = false;
+        }
+    }
+    void ChooseHouse() //generador de casas en base a la información de la aldea
+    {
+        if (expectedLeisure)
+        {
+            SpawnLeisurePlace();
+            return;
+        }
+        if (numOfHabs == 0 || numOfHabs < workCapacity)
+        {
+            SpawnResidential();
+        }
+        //if (buildingGO != null) return;
+        if (workCapacity < numOfHabs || (residentialBuildings[residentialBuildings.Count - 1].GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity * 1.5 >= workCapacity))
+        {
+            SpawnWorkPlace();
+        }
+        else
+        {
+            SpawnLeisurePlace();
         }
     }
 
