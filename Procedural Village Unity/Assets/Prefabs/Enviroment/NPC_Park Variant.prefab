@@ -21,8 +21,16 @@ PrefabInstance:
       value: NPC_Park
       objectReference: {fileID: 0}
     - target: {fileID: 7812830083256255433, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7812830083256255433, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7812830083256255433, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8690909695700999786, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_LocalPosition.x

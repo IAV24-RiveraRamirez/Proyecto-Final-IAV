@@ -42,7 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2595118709037239861}
   m_Layer: 0
-  m_Name: Spawnpoint
+  m_Name: RoadPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

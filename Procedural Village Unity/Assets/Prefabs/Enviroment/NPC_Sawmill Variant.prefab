@@ -289,8 +289,16 @@ PrefabInstance:
       value: NPC_Sawmill Variant
       objectReference: {fileID: 0}
     - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: m_Size.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3338998211233963813, guid: cce7775e4918fa74986689a485c4da32, type: 3}
