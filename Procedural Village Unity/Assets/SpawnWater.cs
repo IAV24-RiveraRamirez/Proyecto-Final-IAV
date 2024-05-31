@@ -8,6 +8,9 @@ public class SpawnWater : MonoBehaviour
     void Start()
     {
         SettingsManager settings = GameObject.Find("SettingsManager").GetComponent<SettingsManager>();
-        if (!settings.toogleWater) Destroy(gameObject);
+        if (!settings.toogleWater)
+        {
+            Destroy(gameObject);
+        }
     }
 }

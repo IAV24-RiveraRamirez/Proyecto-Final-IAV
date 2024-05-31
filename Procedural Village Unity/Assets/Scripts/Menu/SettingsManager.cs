@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore;
+using UnityEngine.SceneManagement;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class SettingsManager : MonoBehaviour
     public float maxTreeHeightSpawn = 0;
     public float treeSpawnInterval = 0;
     public float treeSpawnMinValue = 0;
+    public float maxHouseAngle = 0;
 
     private void Awake()
     {
@@ -33,4 +35,6 @@ public class SettingsManager : MonoBehaviour
     public void setMaxTreeHeightSpawn(float v) { maxTreeHeightSpawn = v; }
     public void setTreeSpawnInterval(float v) { treeSpawnInterval = v; }
     public void setTreenMinSpawnValue(float v) { treeSpawnMinValue = v; }
+
+    public void setMaxHouseAngle(float v) { maxHouseAngle = v; }
 }
