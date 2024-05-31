@@ -42,7 +42,7 @@ public class S_BuyItem : State
             amount = Random.Range(1, max + 1);
             Debug.Log("Buying: " + item + " x " + amount + "/" + max);
         }
-        market.AddNPCToQueue(info, item, amount, Market.Request.RequestType.BUY);
+        market.MakeRequest(info, item, amount, Market.Request.RequestType.BUY);
         lastMoney = info.GetMoney();
     }
 

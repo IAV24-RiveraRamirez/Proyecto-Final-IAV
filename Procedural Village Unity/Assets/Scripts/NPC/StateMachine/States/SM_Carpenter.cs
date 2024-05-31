@@ -38,6 +38,7 @@ public class SM_Carpenter : SM_Work
         state4.AddTransition(new T_ItemWasBought(state1));
         state4.AddTransition(new T_NotEnoughMoneyToBuyForWoodShop(state5));
         state4.AddTransition(new T_ShopHasNoItem(stopWorking));
+        state3.AddTransition(new T_MarketClosed(stopWorking));
 
         state5.AddTransition(new T_RunOutOfCraftsToSell(stopWorking));
 

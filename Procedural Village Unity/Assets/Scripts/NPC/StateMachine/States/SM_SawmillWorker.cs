@@ -26,7 +26,12 @@ public class SM_SawmillWorker : SM_Work
         state3.AddTransition(new T_ReachDestination(state4, 3.0f));
         state4.AddTransition(new T_ZeroUnitsOfItem(state1, "Wood"));
 
-        AddState(state1).AddState(state2).AddState(state3).AddState(state4);
+        State stopWorking = new S_StopWorking();
+
+        state3.AddTransition(new T_MarketClosed(stopWorking));
+
+
+        AddState(state1).AddState(state2).AddState(state3).AddState(state4).AddState(stopWorking);
 
         object obj = blackboard.Get("Wood", typeof(int));
         if (obj != null && (int)obj > 0)

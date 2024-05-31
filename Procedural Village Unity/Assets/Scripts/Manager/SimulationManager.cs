@@ -66,6 +66,7 @@ public class SimulationManager : MonoBehaviour
     [Tooltip("How fast time goes by")]
     [SerializeField] float timeRate = 0.5f;
     [SerializeField, Range(0, 24)] float timeOfDay;
+    [SerializeField] bool spawnNPCs = false;
 
     [Tooltip("Time when morning, afternoon and evening start (Range 0-23)")]
     [SerializeField] Day squedule;
@@ -240,8 +241,15 @@ public class SimulationManager : MonoBehaviour
         {
             Debug.LogError("Missing 'NPCPrefab' reference on SimulationManager.");
         }
+        else if (spawnNPCs) StartCoroutine(Spawn());
     }
 
+
+    IEnumerator Spawn()
+    {
+        yield return new WaitForSeconds(0.5f);
+        SpawnNPCs();
+    }
     // Update is called once per frame
     void Update()
     {

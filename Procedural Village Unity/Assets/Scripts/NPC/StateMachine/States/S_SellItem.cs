@@ -22,7 +22,7 @@ public class S_SellItem : State
         gameObject.GetComponent<NavMeshAgent>().isStopped = true;
 
         Market market = info.GetMarketPlace() as Market;
-        market.AddNPCToQueue(info, item, (int)fsm.blackboard.Get(itemNameOnBlacboard, typeof(int)), Market.Request.RequestType.SELL);
+        market.MakeRequest(info, item, (int)fsm.blackboard.Get(itemNameOnBlacboard, typeof(int)), Market.Request.RequestType.SELL);
         lastMoney = info.GetMoney();
     }
 

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class SM_Leisure : StateMachine
@@ -28,7 +26,8 @@ public class SM_Leisure : StateMachine
         state3.AddTransition(new T_ItemWasBought(state1));
         state3.AddTransition(new T_ShopHasNoItem(state1));
         state3.AddTransition(new T_NotEnoughMoney(state1));
-        
+        state3.AddTransition(new T_MarketClosed(state1));
+
         toActivity.AddTransition(new T_ReachDestination(state2, 2.5f));
         toMarket.AddTransition(new T_ReachDestination(state3, 2.5f));
 

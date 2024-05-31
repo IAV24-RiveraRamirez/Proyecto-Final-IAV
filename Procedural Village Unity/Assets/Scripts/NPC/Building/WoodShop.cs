@@ -119,9 +119,8 @@ public class WoodShop : Market
         SimulationManager.Instance.AddBuilding(this);
     }
 
-    protected override void Update()
+    protected void Update()
     {
-        base.Update();
         if (SimulationManager.Instance.GetCurrentPeriod() == SimulationManager.TimePeriods.EVENING) npcIsRefillingWood = false;
     }
 

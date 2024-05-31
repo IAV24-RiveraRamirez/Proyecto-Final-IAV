@@ -15,7 +15,7 @@ public class House : NPCBuilding
     /// <summary>
     /// Cuántos NPCs se spawnearán
     /// </summary>
-    int numNPCsToSpawn = -1;
+    [SerializeField] int numNPCsToSpawn = -1;
 
     public void SetNPCsToSpawn(int num) {  numNPCsToSpawn = num; }
 
@@ -27,8 +27,8 @@ public class House : NPCBuilding
     protected override void Start()
     {
         base.Start();
-
-        numNPCsToSpawn = Random.Range(1, maxNpcs);
+        if (numNPCsToSpawn < 0) numNPCsToSpawn = maxNpcs;
+        else numNPCsToSpawn = Random.Range(1, maxNpcs);
 
         if (!spawnPoint) { spawnPoint = transform.GetChild(0).transform; }
         if (!spawnPoint) { Debug.LogError("'Spawnpoint' GameObject missing as child of House prefab"); }

@@ -47,7 +47,7 @@ public class Market : NPCBuilding
 
     // Enum
     public enum Item { WOOD, CRAFTS }
-    public enum BuyRequestOutput { RESTING_STATE, ITEM_BOUGHT, NO_CLIENT, CLIENT_HAS_NO_MONEY, SHOP_HAS_NO_ITEM }
+    public enum BuyRequestOutput { RESTING_STATE, ITEM_BOUGHT, NO_CLIENT, CLIENT_HAS_NO_MONEY, SHOP_HAS_NO_ITEM, MARKET_CLOSED }
 
     // References 
     NPCInfo npcAttendingShop = null;
@@ -56,6 +56,7 @@ public class Market : NPCBuilding
     // Parameters
     [SerializeField] MarketPrices sellPrices;
     [SerializeField] MarketPrices buyPrices;
+    [SerializeField] float timeToProcessRequest = 1.5f;
 
     // Variables
     Queue<Request> queue = new Queue<Request>();
@@ -63,7 +64,7 @@ public class Market : NPCBuilding
     bool processingRequest = false;
 
     // Own Methods
-    public void AddNPCToQueue(NPCInfo client, Item item, int amount, Request.RequestType type)
+    public void MakeRequest(NPCInfo client, Item item, int amount, Request.RequestType type)
     {
         if (amount == 0)
         {
@@ -71,6 +72,7 @@ public class Market : NPCBuilding
             client.SetLastBuyResult(BuyRequestOutput.SHOP_HAS_NO_ITEM);
             return;
         }
+        if (npcAttendingShop == null) { client.SetLastBuyResult(BuyRequestOutput.MARKET_CLOSED); return; }
         queue.Enqueue(new Request(client, item, amount, type));
     }
 
@@ -108,27 +110,21 @@ public class Market : NPCBuilding
         else if (itemAmount[item] == -1) itemAmount[item] = amount;
     }
 
-    public void Buy(NPCInfo client, Item item, int amount)
+    void Buy(NPCInfo client, Item item, int amount)
     {
         processingRequest = true;
         this.client = client;
-        Blackboard blackboard = npcAttendingShop.GetComponent<NPCBehaviourSM>().GetStateMachine().blackboard;
-        blackboard.Set("Sell_Request", typeof(bool), true);
-        blackboard.Set("Sell_Item", typeof(Item), item);
-        blackboard.Set("Sell_ItemAmout", typeof(int), amount);
+        GiveMoneyToClient(item, amount);
     }
 
-    public void Sell(NPCInfo client, Item item, int amount)
+    void Sell(NPCInfo client, Item item, int amount)
     {
         processingRequest = true;
         this.client = client;
-        Blackboard blackboard = npcAttendingShop.GetComponent<NPCBehaviourSM>().GetStateMachine().blackboard;
-        blackboard.Set("Buy_Request", typeof(bool), true);
-        blackboard.Set("Buy_Item", typeof(Item), item);
-        blackboard.Set("Buy_ItemAmout", typeof(int), amount);
+        GetMoneyFromClient(item, amount);
     }
 
-    public BuyRequestOutput GetMoneyFromClient(Item item, int amount)
+    BuyRequestOutput GetMoneyFromClient(Item item, int amount)
     {
         BuyRequestOutput result = BuyRequestOutput.RESTING_STATE;
         if (client != null)
@@ -168,7 +164,7 @@ public class Market : NPCBuilding
         return result;
     }
 
-    public bool GiveMoneyToClient(Item item, int amount)
+    bool GiveMoneyToClient(Item item, int amount)
     {
         if (client != null)
         {
@@ -196,10 +192,12 @@ public class Market : NPCBuilding
         npcAttendingShop = info;
         if(info == null)
         {
+            processingRequest = false;
+            this.client = null;
             while(queue.Count > 0)
             {
                 Request r = queue.Dequeue();
-                r.client.SetLastBuyResult(BuyRequestOutput.SHOP_HAS_NO_ITEM);
+                r.client.SetLastBuyResult(BuyRequestOutput.MARKET_CLOSED);
             }
         }
     }
@@ -223,6 +221,19 @@ public class Market : NPCBuilding
         }
     }
 
+    IEnumerator ProcessRequest(Request request)
+    {
+        processingRequest = true;
+        yield return new WaitForSeconds(timeToProcessRequest);
+
+        if (request.type == Request.RequestType.SELL)
+            Buy(request.client, request.item, request.amount);
+        else
+            Sell(request.client, request.item, request.amount);
+
+        processingRequest = false;
+    }
+
     protected override void Start()
     {
         maxNpcs = 1;
@@ -231,15 +242,13 @@ public class Market : NPCBuilding
         base.Start();
     }
 
-    protected virtual void Update()
+
+    public void Attend()
     {
-        if(queue.Count > 0 && !processingRequest && npcAttendingShop)
+        if (queue.Count > 0 && !processingRequest && npcAttendingShop)
         {
             Request request = queue.Dequeue();
-            if (request.type == Request.RequestType.SELL)
-                Buy(request.client, request.item, request.amount);
-            else
-                Sell(request.client, request.item, request.amount);
+            StartCoroutine(ProcessRequest(request));
         }
     }
 }
