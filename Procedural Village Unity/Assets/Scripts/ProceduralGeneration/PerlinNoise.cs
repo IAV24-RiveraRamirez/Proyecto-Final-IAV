@@ -108,18 +108,12 @@ public class PerlinNoise : MonoBehaviour
         terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
 
-        if (spawnWater && water != null) //Generación de agua
-        {
-            Vector3 spawnPosition = new Vector3(gameObject.transform.position.x + (dimensions / 2), gameObject.transform.position.y + 1, gameObject.transform.position.z + (dimensions / 2));
-            GameObject waterRef = GameObject.Instantiate(water, spawnPosition, Quaternion.identity);
-            waterRef.transform.localScale = new Vector3(dimensions / 2, 1, dimensions / 2);
-        }
         structuresGenerator = gameObject.GetComponent<StructuresGenerator>();
         structuresGenerator.setValues(dimensions, houseSpace);
 
         StartCoroutine(StartGeneration());
 
-        cameraRef = GameObject.Find("Main Camera");//Se puede hacer mejor
+        cameraRef = Camera.main.gameObject;//Se puede hacer mejor
         if(cameraRef) cameraPosition = cameraRef.transform.position;
     }
 
@@ -143,18 +137,26 @@ public class PerlinNoise : MonoBehaviour
             float maxVillageSize = 10;
             cameraPosition = originPoint + new Vector3(0,80,-50);
             Vector3 center = originPoint;
-            
-            for (int i = 0; i < housesToSpawn-1; i++)
+
+            Stack<Vector3> positions = new Stack<Vector3>();
+            positions.Push(originPoint);
+
+            while (places.Count < housesToSpawn - 1 && positions.Count > 0)
             {
+                buildingPosition = positions.Peek();
                 if (structuresGenerator.findNearSpots(ref buildingPosition, originPoint))
                 {
                     PlaceBuilding();
                     center += buildingPosition;
                     places.Add(buildingPosition);
+                    positions.Push(buildingPosition);
                 }
-                else buildingPosition = originPoint;
+                else {
+                    positions.Pop();
+                }
                 yield return new WaitForNextFrameUnit();
             }
+
             if(expectedNextBuilding != null)
             {
                 expectedNextBuilding = null;
@@ -184,6 +186,7 @@ public class PerlinNoise : MonoBehaviour
             yield return new WaitForSeconds(1);
             Debug.Log(numOfHabs + " " + workCapacity + " " + leisureCapacity);
             startCameraMovement = true;
+            SimulationManager.Instance.SpawnNPCs();
         }
     }
 
@@ -214,7 +217,7 @@ public class PerlinNoise : MonoBehaviour
 
     void ChooseHouse() //generador de casas en base a la información de la aldea
     {
-        GameObject buildingGO;
+        GameObject buildingGO = null;
         if (numOfHabs == 0 || numOfHabs < workCapacity)
         {
             foreach (GameObject b in residentialBuildings)
@@ -227,6 +230,7 @@ public class PerlinNoise : MonoBehaviour
                 }
             }
         }
+        if (buildingGO != null) return;
         if (workCapacity < numOfHabs || (residentialBuildings[residentialBuildings.Count - 1].GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity * 1.5 >= workCapacity))
         {
             if(expectedNextBuilding == sawMill)

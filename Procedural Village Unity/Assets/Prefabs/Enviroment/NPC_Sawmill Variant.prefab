@@ -290,11 +290,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Size.x
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Size.z
-      value: 1.5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3534869648548047556, guid: cce7775e4918fa74986689a485c4da32, type: 3}
       propertyPath: m_Enabled

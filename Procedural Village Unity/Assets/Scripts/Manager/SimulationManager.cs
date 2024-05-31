@@ -210,10 +210,8 @@ public class SimulationManager : MonoBehaviour
         return GetNewBuilding(npc, wokrplacePosition, NPCBuilding.BuildingType.MARKET);
     }
 
-    IEnumerator SpawnNPCs(float afterSeconds)
+    public void SpawnNPCs()
     {
-        yield return new WaitForSeconds(afterSeconds);
-
         foreach(NPCBuilding building in npcBuildings[NPCBuilding.BuildingType.HOUSE])
         {
             House house = building as House;
@@ -230,7 +228,6 @@ public class SimulationManager : MonoBehaviour
         {
             Debug.LogError("Missing 'NPCPrefab' reference on SimulationManager.");
         }
-        StartCoroutine(SpawnNPCs(1.0f));
     }
 
     // Update is called once per frame

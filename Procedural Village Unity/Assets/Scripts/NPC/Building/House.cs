@@ -16,12 +16,13 @@ public class House : NPCBuilding
     {
         base.Start();
 
+        numNPCsToSpawn = Random.Range(1, maxNpcs);
+
         if (!spawnPoint) { spawnPoint = transform.GetChild(0).transform; }
         if (!spawnPoint) { Debug.LogError("'Spawnpoint' GameObject missing as child of House prefab"); }
     }
     public void SpawnNPCs()
     {
-        if (numNPCsToSpawn <= 0) numNPCsToSpawn = maxNpcs;
         if (!spawnPoint)
         {
             Debug.LogError("Missing reference to 'Spawnpoint' GameObject");

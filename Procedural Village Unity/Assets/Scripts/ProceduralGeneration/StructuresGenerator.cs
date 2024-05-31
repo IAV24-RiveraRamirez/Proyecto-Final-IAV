@@ -116,9 +116,31 @@ public class StructuresGenerator : MonoBehaviour
         RaycastHit hitResult = new RaycastHit();
         while (nTests < maxNumRayCastTests) //Hacemos todos los test aunque encontremos un sitio válido porque queremos el mejor sitio de todos los válidos encontrados
         {
-            Vector3 o = new Vector3(Random.Range((buildingPos.x - 20), (buildingPos.x + 20)), 100, Random.Range((buildingPos.z - 20), (buildingPos.z + 20)));
+            Vector3 o;
+            int direction = nTests % 4;
+            Color color = Color.white;
+            if(direction <= 0)
+            {
+                o = new Vector3(buildingPos.x + 7.5f, 100, buildingPos.z);
+            }
+            else if(direction <= 1)
+            {
+                o = new Vector3(buildingPos.x - 7.5f, 100, buildingPos.z);
+                color = Color.red;
+            }
+            else if (direction <= 2)
+            {
+                o = new Vector3(buildingPos.x, 100, buildingPos.z + 10);
+                color = Color.green;
+            }
+            else
+            {
+                color = Color.blue;
+                o = new Vector3(buildingPos.x, 100, buildingPos.z - 10);
+            }
             Vector3 dir = new Vector3(0, -200, 0);
             bool hasHit = Physics.Raycast(o, dir, out hitResult, 200);
+            Debug.DrawRay(o, dir, color);
             if (hasHit && hitResult.transform.gameObject.tag == "Terrain" && isTerrainValid(hitResult.normal, maxHouseAngle) && isPointInsideBoundaries(hitResult.point) && Mathf.Abs(hitResult.point.y - originalHeight) <= maxHouseHeightDifference && (maxVillageSeparation < 0 || Vector3.Distance(hitResult.point, startPosition) <= maxVillageSeparation))
             {
                 if(Mathf.Abs(originalHeight - hitResult.point.y) < bestHeightDiff)
