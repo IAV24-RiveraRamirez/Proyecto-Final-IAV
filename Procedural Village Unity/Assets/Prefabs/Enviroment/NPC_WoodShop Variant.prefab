@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_WoodShop Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 5611099909059328141, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7cbbd4749359e54428d8efe9a2f67138, type: 2}
     - target: {fileID: 6397291842938413997, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.62

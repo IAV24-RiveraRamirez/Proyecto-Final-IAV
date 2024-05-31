@@ -162,7 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f701d183e0b1f40ad28639e68954d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNpcs: 7
+  maxNpcs: 5
   type: 2
 --- !u!114 &2679015469821449259
 MonoBehaviour:

@@ -26,11 +26,17 @@ public class PerlinNoise : MonoBehaviour
     [SerializeField]
     GameObject water = null;
     [SerializeField]
-    GameObject residentialBuilding = null;
+    public List<GameObject> residentialBuildings;
     [SerializeField]
-    GameObject workBuilding = null;
+    public List<GameObject> workBuildings;
     [SerializeField]
-    GameObject leisureBuilding = null;
+    public List<GameObject> leisureBuildings;
+    [SerializeField]
+    GameObject market = null;
+    [SerializeField]
+    GameObject woodShop = null;
+    [SerializeField]
+    GameObject sawMill = null;
     [SerializeField]
     TerrainRegions[] regionsParameters;
     [SerializeField]
@@ -54,6 +60,8 @@ public class PerlinNoise : MonoBehaviour
     GameObject cameraRef;
     Vector3 cameraPosition;
     SettingsManager settingsManager;
+    GameObject expectedNextBuilding = null;
+    List<GameObject> woodShopDependencies;
 
     [System.Serializable]
     public struct TerrainRegions
@@ -72,11 +80,21 @@ public class PerlinNoise : MonoBehaviour
         spawnWater = settingsManager.toogleWater;
         randomizeOffset = settingsManager.randomOffsets;
     }
+    int buildingComparer(GameObject b1, GameObject b2) //Función que ordena los edificios de más a menos capacidad
+    {
+        return b2.GetComponentInChildren<NPCBuilding>().GetMaxNPCs().CompareTo(b1.GetComponentInChildren<NPCBuilding>().GetMaxNPCs());
+    }
 
     void Start()
     {
-        settingsManager = GameObject.Find("SettingsManager").GetComponent<SettingsManager>();
+        GameObject SM = GameObject.Find("SettingsManager");
+        if(SM) settingsManager = SM.GetComponent<SettingsManager>();
         if (settingsManager) setValues();
+
+        residentialBuildings.Sort(buildingComparer);
+        workBuildings.Sort(buildingComparer);
+        leisureBuildings.Sort(buildingComparer);
+        woodShopDependencies = new List<GameObject>();
 
         if (randomizeOffset)
         {
@@ -137,6 +155,18 @@ public class PerlinNoise : MonoBehaviour
                 else buildingPosition = originPoint;
                 yield return new WaitForNextFrameUnit();
             }
+            if(expectedNextBuilding != null)
+            {
+                expectedNextBuilding = null;
+                foreach(GameObject b in woodShopDependencies)
+                {
+                    Vector3 pos = b.transform.position;
+                    Destroy(b);
+                    if(b == market) GameObject.Instantiate(leisureBuildings[0], pos, Quaternion.identity);
+                    else GameObject.Instantiate(leisureBuildings[0], pos, Quaternion.identity);
+                }
+                woodShopDependencies.Clear();
+            }
             center = center / places.Count; //Aproximación del centro de la aldea
             foreach (Vector3 v in places)
             {
@@ -151,8 +181,8 @@ public class PerlinNoise : MonoBehaviour
 
             structuresGenerator.spawnEnvironmentAssets(ref environmentAssets, dimensions, scale);
 
-            Debug.LogWarning("Terniné");
             yield return new WaitForSeconds(1);
+            Debug.Log(numOfHabs + " " + workCapacity + " " + leisureCapacity);
             startCameraMovement = true;
         }
     }
@@ -185,20 +215,60 @@ public class PerlinNoise : MonoBehaviour
     void ChooseHouse() //generador de casas en base a la información de la aldea
     {
         GameObject buildingGO;
-        if (numOfHabs == 0 || (numOfHabs < workCapacity && residentialBuilding.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs <= workCapacity))
+        if (numOfHabs == 0 || numOfHabs < workCapacity)
         {
-            buildingGO = GameObject.Instantiate(residentialBuilding, buildingPosition, Quaternion.identity);
-            numOfHabs += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            foreach (GameObject b in residentialBuildings)
+            {
+                if (b.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs <= workCapacity)
+                {
+                    buildingGO = GameObject.Instantiate(b, buildingPosition, Quaternion.identity);
+                    numOfHabs += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                    break;
+                }
+            }
         }
-        else if (workCapacity < numOfHabs || (residentialBuilding.GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity*1.5 >= workCapacity))
+        if (workCapacity < numOfHabs || (residentialBuildings[residentialBuildings.Count - 1].GetComponentInChildren<NPCBuilding>().GetMaxNPCs() + numOfHabs > workCapacity && leisureCapacity * 1.5 >= workCapacity))
         {
-            buildingGO = GameObject.Instantiate(workBuilding, buildingPosition, Quaternion.identity);
-            workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            if(expectedNextBuilding == sawMill)
+            {
+                buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
+                workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                woodShopDependencies.Add(buildingGO);
+                expectedNextBuilding = market;
+            }
+            else
+            {
+                int random = UnityEngine.Random.Range(0, 101);
+                if (random <= 80)
+                {
+                    random = UnityEngine.Random.Range(0, workBuildings.Count);
+                    buildingGO = GameObject.Instantiate(workBuildings[random], buildingPosition, Quaternion.identity);
+                    workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                }
+                else
+                {
+                    buildingGO = GameObject.Instantiate(woodShop, buildingPosition, Quaternion.identity);
+                    workCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                    woodShopDependencies.Add(buildingGO);
+                    expectedNextBuilding = sawMill;
+                }
+            }
         }
         else
         {
-            buildingGO = GameObject.Instantiate(leisureBuilding, buildingPosition, Quaternion.identity);
-            leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            if(expectedNextBuilding == market)
+            {
+                buildingGO = GameObject.Instantiate(expectedNextBuilding, buildingPosition, Quaternion.identity);
+                leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+                woodShopDependencies.Clear();
+                expectedNextBuilding = null;
+            }
+            else
+            {
+                int random = UnityEngine.Random.Range(0, leisureBuildings.Count);
+                buildingGO = GameObject.Instantiate(leisureBuildings[random], buildingPosition, Quaternion.identity);
+                leisureCapacity += buildingGO.GetComponentInChildren<NPCBuilding>().GetMaxNPCs();
+            }
         }
     }
 

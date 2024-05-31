@@ -26,12 +26,20 @@ public class StructuresGenerator : MonoBehaviour
 
     private void Start()
     {
-        SettingsManager settingsManager = GameObject.Find("SettingsManager").GetComponent<SettingsManager>();
-        maxHouseHeightDifference = settingsManager.maxHousesHeightDiff;
-        maxVillageSeparation = settingsManager.maxVillageSeparation;
-        maxTreeSpawnHeight = settingsManager.maxTreeHeightSpawn;
-        treeGenerationInterval = settingsManager.treeSpawnInterval;
-        minTreeValueGenerator = settingsManager.treeSpawnMinValue;
+        GameObject SM = GameObject.Find("SettingsManager");
+        if (SM)
+        {
+            SettingsManager settingsManager = SM.GetComponent<SettingsManager>();
+            if (settingsManager)
+            {
+                maxHouseHeightDifference = settingsManager.maxHousesHeightDiff;
+                maxVillageSeparation = settingsManager.maxVillageSeparation;
+                maxTreeSpawnHeight = settingsManager.maxTreeHeightSpawn;
+                treeGenerationInterval = settingsManager.treeSpawnInterval;
+                minTreeValueGenerator = settingsManager.treeSpawnMinValue;
+            }
+            
+        }
     }
     public void setValues(int dimensions, int bDimensions)
     {
