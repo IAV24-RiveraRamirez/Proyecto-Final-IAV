@@ -300,30 +300,36 @@ Asumiendo que cada punto equivale a 30 minutos:
 
 En caso de disponer del tiempo suficiente, nos gustaría poder implementar las siguientes ampliaciones al proyecto, para dejar una experiencia más cerrada, en la que se explora más de un tipo de comportamiento:
 
-- **Especializaciones de NPC**: Un NPC podría no tener un trabajo genérico, sino un trabajo específico que aporte algo a la aldea. Algunos ejemplos: Granjero, Herrero, Ganadero, Comerciante, etc. Esto afectaría tremendamente a la hora de generación procedural de la aldea, ya que la colocación de edificios debería poder adaptarse al número de trabajadores de cada tipo, colocando los lugares de trabajo necesarios en lugar de un lugar de trabajo genérico. También, obviamente, afectaría al comportamiento de los NPCs
+- **Especializaciones de NPC** (Realizada): Un NPC podría no tener un trabajo genérico, sino un trabajo específico que aporte algo a la aldea. Algunos ejemplos: Granjero, Herrero, Ganadero, Comerciante, etc. Esto afectaría tremendamente a la hora de generación procedural de la aldea, ya que la colocación de edificios debería poder adaptarse al número de trabajadores de cada tipo, colocando los lugares de trabajo necesarios en lugar de un lugar de trabajo genérico. También, obviamente, afectaría al comportamiento de los NPCs
 
-- **Eventos de Peligro**: Un evento de consecuencias catastróficas puede tener lugar en la aldea. Para ello, los ciudadanos dejarían de lado su ciclo de actuación convencial para desviarse y conseguir para esta amenaza. Algunos ejemplos: Incendio, Ventisca, Ataque enemigo, etc. La máquina de estados de los NPCs cambiaría drásticamente para poder reflejar el impacto de este evento en el mundo.
+Se han implementado: Trabajador en Aserredro, Carpintero, Mercader de Compra de recursos.
+
+- **Eventos de Peligro** (No implementado): Un evento de consecuencias catastróficas puede tener lugar en la aldea. Para ello, los ciudadanos dejarían de lado su ciclo de actuación convencial para desviarse y conseguir para esta amenaza. Algunos ejemplos: Incendio, Ventisca, Ataque enemigo, etc. La máquina de estados de los NPCs cambiaría drásticamente para poder reflejar el impacto de este evento en el mundo.
 
 
 ## Pruebas y métricas
 
 Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo el contenido implementado se pueden hacer las siguientes pruebas en la escena _Test_ _Level_ y posteriormente en la escena _Level_ _1_:
 
-- A: Para empezar, vamos a hacer _scroll_ con el ratón para comprobar que el zoom está hecho. Comprobar que está limitado, tanto al acercar como al alejar la cámara.
-- B - 1: Entrar en la sala del botón azul. Meterse entre los robots y esperar a que el robot mire en tu dirección, para verificar que no detectan al jugador.
-- C: Salir del escondite y colocarse en frente al robot, para comprobar que te detecta y que dispara hasta quedarse sin munición. Verificar que al quedarse sin munición, vuelve a su base a recargar. Comprobar que el jugador muere al quedarse sin vida. Tras morir, cargar la escena de _test_ otra vez y acercarse otra vez al robot, asegurarse de que te percibe y alejarse para comprobar si te persigue.
-- B - 2: Pulsar el botón azul, pasar por la puerta azul y acercarse a la puerta blanca que está cerrada. Verificar que el robot, al mirar a la puerta, no te detectan.
-- D y E: . Por último, completar el nivel o dejar que los robots derroten al jugador para cargar la escena _Level_ _1_. Para comprobar el funcionamiento de la pizarra, basta con esperar a que resuelva el nivel, ya que el jugador se moverá entre varios puntos del mapa almacenados en la pizarra para conocer que salas tiene que visitar. Verificar que el resultado es correcto, es decir, que Nestor llega a la salida.
+- A: Probar que el cambio de valores desde el menú afecta directamente a la generación de la aldea y del terreno.
+- B: Comprobar el comportamiento de los diferentes NPCs con los edificios en los que están
 
 ## Conclusiones
 
+
+
 ## Documental con las pruebas y características
 
+
+
 ## Licencia
+
+
 
 ## Referencias
 
 Los recursos de terceros utilizados son de uso público.
 
+- Obstáculos del entorno: [Link](https://assetstore.unity.com/packages/3d/environments/fantasy/fantasy-forest-set-free-70568)
+
 - _AI for Games_, Ian Millington.
-- Textura de hierba, https://www.pinterest.es/pin/2322237300422260/
