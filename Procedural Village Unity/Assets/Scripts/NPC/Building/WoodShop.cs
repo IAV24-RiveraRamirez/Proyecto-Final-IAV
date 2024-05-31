@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class WoodShop : Market
@@ -44,26 +42,43 @@ public class WoodShop : Market
     public int GetMaxWood() { return maxWoodStored; }
 
     // Own Methods
-    public CraftingProgress Work(NPCInfo worker)
+    public void Work(NPCInfo worker)
     {
         if (!npcProgress.ContainsKey(worker))
         {
             npcProgress.Add(worker, null);
         }
-        CraftingProgress progress = null;
-        progress = npcProgress[worker];
-        if (progress == null)
+        if (npcProgress[worker] == null)
         {
-            progress = StartNewCraft();
-            if (progress == null)
+            CraftingProgress newProgress = StartNewCraft();
+            if(newProgress == null)
             {
-                Debug.Log("Need more wood!");
-                return null;
-            }
-        }
-        return progress;
-    }
+                Debug.Log("Need More Wood");
 
+                Blackboard blackboard = worker.GetComponent<NPCBehaviourSM>().GetStateMachine().blackboard;
+
+                if (!(bool)blackboard.Get("Craft_GoRefill", typeof(bool)))
+                {
+                    bool goToRefill = LeaveShopToRefill();
+                    if (goToRefill)
+                    {
+                        blackboard.Set("Craft_GoRefill", typeof(bool), true);
+                        blackboard.Set("Craft_WoodAmount", typeof(int), GetMaxWood());
+                    }
+                    else
+                    {
+                        blackboard.Set("WorkDayEnded", typeof(bool), true);
+                    }
+                }
+            } 
+            else npcProgress[worker] = newProgress;
+        }
+        else
+        {
+            npcProgress[worker].MakeProgress(Time.deltaTime);
+            CraftCompleted(worker);
+        }
+    }
     public bool LeaveShopToRefill()
     {
         if (npcIsRefillingWood) return false;
@@ -91,9 +106,21 @@ public class WoodShop : Market
         else return null;
     }
 
-    public bool CraftCompleted(NPCInfo worker, CraftingProgress progress)
+    public bool CraftCompleted(NPCInfo worker)
     {
-        if(!progress.IsCompleted()) { Debug.Log("Progress from "+ worker.gameObject.name+ " was not Completed!"); return false; }
+        if(!npcProgress[worker].IsCompleted()) { return false; }
+
+        Blackboard blackboard = worker.GetComponent<NPCBehaviourSM>().GetStateMachine().blackboard;
+        object obj = blackboard.Get("Craft_ItemsCrafted", typeof(int));
+        if (obj == null)
+        {
+            blackboard.Set("Craft_ItemsCrafted", typeof(int), 1);
+        }
+        else
+        {
+            int numCrafts = (int)obj;
+            blackboard.Set("Craft_ItemsCrafted", typeof(int), numCrafts + 1);
+        }
 
         npcProgress[worker] = null;
         return true;

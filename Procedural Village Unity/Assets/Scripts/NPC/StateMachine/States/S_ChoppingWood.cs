@@ -1,12 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 public class S_ChoppingWood : State
 {
-    // Variables
-    float timer = 0;
-
     NPCInfo info = null;
     Sawmill sawmill;
 
