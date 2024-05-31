@@ -20,7 +20,7 @@ Cada alumno se centrará en uno de los dos pilares fundamentales de la práctica
 - Toggle water: permite activar o desactivar la generación de agua en el mapa. Las casas no podrán generarse en lugares con agua y los NPC no pueden moverse por encima. Activar esta opción puede provocar que algunos parámetros de la generación no se cumplan pues complica la generación.
 - Random Perlin noise: si se activa se generarán unos offsets aleatorios que darán como resultado un ruido de Perlin diferente en cada ejecución.
 - Octaves number: el número de octavas que usará el algoritmo para generar el ruido de Perlin.
-- Terrain depth: ajusta la altura del terreno. Cuanto mayor sea el valor mayores serán las alturas del relieve generado.
+- Terrain depth: ajusta la altura del terreno. Cuanto mayor sea el valor mayores será el relieve generado.
 - Perlin scale: determina la escala del ruido de Perlin.
 - Houses to spawn: el número máximo de casas que se intentarán generar.
 - Max village separation: el la separación máxima que puede haber entre una casa que se vaya a generar y el centro de la aldea, no se pueden generar casas a una distancia mayor que la indicada en este valor.
@@ -29,7 +29,6 @@ Cada alumno se centrará en uno de los dos pilares fundamentales de la práctica
 - Trees max height spawn: altura máxima a la que se pueden generar árboles.
 - Tree spawn interval: intervalo de generación de árboles, cuanto menor sea este valor más comprobaciones de generación de árboles se harán.
 - Min tree spawn value: los árboles se generan siguiendo otro mapa de ruido de Perlin diferente al del terreno. Con este valor se indica el valor mínimo que tiene que tener un punto en dicho mapa para que se pueda generar un árbol en esas coordenadas.
-- 
 
 ## Planteamiento del problema
 
@@ -45,7 +44,7 @@ El trabajo se ha dividido de la siguiente manera:
 
 En el repositorio están todos los archivos necesarios para ejecutar y probar la práctica.
 
-Más adelante, se creará un ejecutable accesible desde el apartado de _releases_ del repositiorio de _GitHub_ con la última _build_ generada y con todos los recursos del proyecto. Solo se deberá corregir la _build_ marcada como la más reciente.
+Hay un ejecutable accesible desde el apartado de _releases_ del repositiorio de _GitHub_ con la última _build_ generada y con todos los recursos del proyecto. Solo se deberá corregir la _build_ marcada como la más reciente.
 
 ## Punto de partida
 El proyecto de partida será un proyecto vacío.
@@ -317,6 +316,7 @@ Asumiendo que cada punto equivale a 30 minutos:
 En caso de disponer del tiempo suficiente, nos gustaría poder implementar las siguientes ampliaciones al proyecto, para dejar una experiencia más cerrada, en la que se explora más de un tipo de comportamiento:
 
 - **Especializaciones de NPC** (Realizada): Un NPC podría no tener un trabajo genérico, sino un trabajo específico que aporte algo a la aldea. Algunos ejemplos: Granjero, Herrero, Ganadero, Comerciante, etc. Esto afectaría tremendamente a la hora de generación procedural de la aldea, ya que la colocación de edificios debería poder adaptarse al número de trabajadores de cada tipo, colocando los lugares de trabajo necesarios en lugar de un lugar de trabajo genérico. También, obviamente, afectaría al comportamiento de los NPCs
+- **Generación de elementos decorativos** (Realizada): Después de haberse generado el terreno y la aldea, se distribuyen árboles por el terreno siguiendo también la distribución de valores en un mapa de Perlin. Además, la generación de árboles se puede alterar cambiando los parámetros presentados en el menú inicial.
 
 Se han implementado: Trabajador en Aserredro, Carpintero, Mercader de Compra de recursos.
 
