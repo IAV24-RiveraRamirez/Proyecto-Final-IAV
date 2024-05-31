@@ -163,6 +163,7 @@ public class PerlinNoise : MonoBehaviour
                 foreach(GameObject b in woodShopDependencies)
                 {
                     Vector3 pos = b.transform.position;
+                    SimulationManager.Instance.RemoveBuilding(b.GetComponentInChildren<NPCBuilding>());
                     Destroy(b);
                     if(b == market) GameObject.Instantiate(leisureBuildings[0], pos, Quaternion.identity);
                     else GameObject.Instantiate(leisureBuildings[0], pos, Quaternion.identity);

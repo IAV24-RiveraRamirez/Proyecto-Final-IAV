@@ -38,10 +38,20 @@ public class NPCBuilding : MonoBehaviour
 
         return full;
     }
+
+    public void DeactivateCollider()
+    {
+        GetComponent<Collider>().enabled = false;
+    }
     
     // Start is called before the first frame update
     protected virtual void Start()
     {
         SimulationManager.Instance.AddBuilding(this);
+    }
+
+    private void OnDestroy()
+    {
+        SimulationManager.Instance.RemoveBuilding(this);
     }
 }

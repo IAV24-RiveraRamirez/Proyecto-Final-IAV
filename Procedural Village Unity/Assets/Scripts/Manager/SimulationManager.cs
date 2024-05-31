@@ -145,11 +145,17 @@ public class SimulationManager : MonoBehaviour
         npcBuildings[type].Add(building);
     }
 
+    public void RemoveBuilding(NPCBuilding building)
+    {
+        npcBuildings[building.GetBuildingType()].Remove(building);
+        if(building.GetBuildingType() == NPCBuilding.BuildingType.WORK) { avaliableWorkingPlaces.Remove(building); }
+        else if(building.GetBuildingType() == NPCBuilding.BuildingType.LEISURE) { avaliableLeisurePlaces.Remove(building); }
+    }
+
     private NPCBuilding GetNewBuilding(NPCInfo npc, Vector3 housePosition, NPCBuilding.BuildingType type)
     {
         List<NPCBuilding> buildings;
-        if (type == NPCBuilding.BuildingType.LEISURE) buildings = avaliableLeisurePlaces;
-        else if (type == NPCBuilding.BuildingType.WORK) buildings = avaliableWorkingPlaces;
+        if (type == NPCBuilding.BuildingType.WORK) buildings = avaliableWorkingPlaces;
         else if (type == NPCBuilding.BuildingType.MARKET) buildings = npcBuildings[NPCBuilding.BuildingType.MARKET];
         else return null;
 
@@ -212,10 +218,16 @@ public class SimulationManager : MonoBehaviour
 
     public void SpawnNPCs()
     {
-        foreach(NPCBuilding building in npcBuildings[NPCBuilding.BuildingType.HOUSE])
+        foreach(KeyValuePair<NPCBuilding.BuildingType, List<NPCBuilding>> b in npcBuildings)
         {
-            House house = building as House;
-            house.SpawnNPCs();
+            foreach(NPCBuilding building in npcBuildings[b.Key])
+            {
+                if(building is House)
+                {
+                    (building as House).SpawnNPCs();
+                }
+                building.DeactivateCollider();
+            }
         }
     }
 

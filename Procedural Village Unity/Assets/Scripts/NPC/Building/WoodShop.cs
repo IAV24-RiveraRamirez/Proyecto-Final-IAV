@@ -124,4 +124,9 @@ public class WoodShop : Market
         base.Update();
         if (SimulationManager.Instance.GetCurrentPeriod() == SimulationManager.TimePeriods.EVENING) npcIsRefillingWood = false;
     }
+
+    private void OnDestroy()
+    {
+        SimulationManager.Instance.RemoveBuilding(this);
+    }
 }
