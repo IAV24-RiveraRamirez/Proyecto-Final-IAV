@@ -1,21 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Search;
 using UnityEngine;
 
+/// <summary>
+/// Clase que simboliza un mercado dentro de la simulación.
+/// </summary>
 public class Market : NPCBuilding
 {
     // Structures 
+    /// <summary>
+    /// Define los precios de los materiales que tenga como variables float.
+    /// </summary>
     [System.Serializable]
     struct MarketPrices
     {
+        /// <summary>
+        /// Precio de madera
+        /// </summary>
         public float wood;
+        /// <summary>
+        /// Precio de Artesanía
+        /// </summary>
         public float crafts;
 
+        /// <summary>
+        /// Array con los precios
+        /// </summary>
         [HideInInspector]
         public float[] prices;
 
+        /// <summary>
+        /// Constructora
+        /// </summary>
+        /// <param name="wood"> precio de madera </param>
+        /// <param name="crafts"> precio de artesanía </param>
         public MarketPrices(float wood, float crafts) 
         {
             this.wood = wood;
@@ -27,12 +45,28 @@ public class Market : NPCBuilding
         }
     }
     
+    /// <summary>
+    /// Estructura que da cuerpo a una petición de compra/venta en el mercado. Es el tipo
+    /// de datos generado por un NPC al pedir una cantidad de un objeto concreto
+    /// </summary>
     public struct Request
     {
+        /// <summary>
+        /// Tipo de petición
+        /// </summary>
         public enum RequestType { BUY, SELL }
 
+        /// <summary>
+        /// Cliente que ha hecho petición
+        /// </summary>
         public NPCInfo client;
+        /// <summary>
+        /// Item pedido
+        /// </summary>
         public Item item;
+        /// <summary>
+        /// Cantidad pedida
+        /// </summary>
         public int amount;
         public RequestType type;
 
@@ -46,24 +80,62 @@ public class Market : NPCBuilding
     }
 
     // Enum
+    /// <summary>
+    /// Tipos de objetos disponibles en tienda
+    /// </summary>
     public enum Item { WOOD, CRAFTS }
+    /// <summary>
+    /// Tipos de Outputs que puede generar una petición de Compra.
+    /// RESTING_STATE es el estado por defecto.
+    /// </summary>
     public enum BuyRequestOutput { RESTING_STATE, ITEM_BOUGHT, NO_CLIENT, CLIENT_HAS_NO_MONEY, SHOP_HAS_NO_ITEM, MARKET_CLOSED }
 
-    // References 
+    // References
+    /// <summary>
+    /// Referencia al NPC que está atendiendo en la tienda
+    /// </summary>
     NPCInfo npcAttendingShop = null;
+    /// <summary>
+    /// Referencia al cliente cuya petición se está procesando actualmente
+    /// </summary>
     NPCInfo client = null;
 
     // Parameters
+    /// <summary>
+    /// Precios de venta de objetos
+    /// </summary>
     [SerializeField] MarketPrices sellPrices;
+    /// <summary>
+    /// Precios de compra de objetos
+    /// </summary>
     [SerializeField] MarketPrices buyPrices;
+    /// <summary>
+    /// Tiempo que tarda el mercado en procesar una petición de un NPC
+    /// </summary>
     [SerializeField] float timeToProcessRequest = 1.5f;
 
     // Variables
+    /// <summary>
+    /// Cola de peticiones de clientes
+    /// </summary>
     Queue<Request> queue = new Queue<Request>();
+    /// <summary>
+    /// Items disponibles y su cantidad
+    /// </summary>
     Dictionary<Item, int> itemAmount = new Dictionary<Item, int>();
+    /// <summary>
+    /// Indica si una petición está siendo procesada o no
+    /// </summary>
     bool processingRequest = false;
 
     // Own Methods
+    /// <summary>
+    /// Petición de NPC al mercado
+    /// </summary>
+    /// <param name="client"> Cliente que ha hecho la petición </param>
+    /// <param name="item"> Item que compra/vende </param>
+    /// <param name="amount"> Cantidad pedida </param>
+    /// <param name="type"> Tipo de petición </param>
     public void MakeRequest(NPCInfo client, Item item, int amount, Request.RequestType type)
     {
         if (amount == 0)
@@ -76,6 +148,12 @@ public class Market : NPCBuilding
         queue.Enqueue(new Request(client, item, amount, type));
     }
 
+    /// <summary>
+    /// Comprueba si un Item, en una cantidad concreta existe en este mercado
+    /// </summary>
+    /// <param name="item"> Item </param>
+    /// <param name="amount"> Cantidad </param>
+    /// <returns></returns>
     public bool IsItemAvaliable(Item item, int amount)
     {
         if(itemAmount.ContainsKey(item))
@@ -110,6 +188,9 @@ public class Market : NPCBuilding
         else if (itemAmount[item] == -1) itemAmount[item] = amount;
     }
 
+    /// <summary>
+    /// Procesar petición de compra
+    /// </summary>
     void Buy(NPCInfo client, Item item, int amount)
     {
         processingRequest = true;
@@ -117,6 +198,9 @@ public class Market : NPCBuilding
         GiveMoneyToClient(item, amount);
     }
 
+    /// <summary>
+    /// Procesar petición de venta
+    /// </summary>
     void Sell(NPCInfo client, Item item, int amount)
     {
         processingRequest = true;
@@ -124,7 +208,11 @@ public class Market : NPCBuilding
         GetMoneyFromClient(item, amount);
     }
 
-    BuyRequestOutput GetMoneyFromClient(Item item, int amount)
+    /// <summary>
+    /// Parte del procesado de una petición de venta.
+    /// Comprueba si el cliente tiene dinero y actúa acorde
+    /// </summary>
+    void GetMoneyFromClient(Item item, int amount)
     {
         BuyRequestOutput result = BuyRequestOutput.RESTING_STATE;
         if (client != null)
@@ -149,10 +237,10 @@ public class Market : NPCBuilding
             }
             else
             {
+                result = BuyRequestOutput.SHOP_HAS_NO_ITEM;
                 client.SetLastBuyResult(result);
                 client = null;
                 processingRequest = false;
-                result = BuyRequestOutput.SHOP_HAS_NO_ITEM;
             }
         }
         else
@@ -160,10 +248,11 @@ public class Market : NPCBuilding
             processingRequest = false;
             result = BuyRequestOutput.NO_CLIENT;
         }
-
-        return result;
     }
 
+    /// <summary>
+    /// Dar dinero al cliente de una petición de venta
+    /// </summary>
     bool GiveMoneyToClient(Item item, int amount)
     {
         if (client != null)
@@ -188,6 +277,10 @@ public class Market : NPCBuilding
         } 
     }
 
+    /// <summary>
+    /// Da valor al NPC que está atendiendo 
+    /// </summary>
+    /// <param name="info"> En caso de null, se da por entendido que se cierra el mercado </param>
     public void SetNPCAttending(NPCInfo info) {
         npcAttendingShop = info;
         if(info == null)
@@ -204,12 +297,20 @@ public class Market : NPCBuilding
 
     public NPCInfo GetNPCAttending() { return npcAttendingShop; }
 
+    /// <summary>
+    /// Construyo los precios de Compra/Venta según los valores dados en el inspector
+    /// </summary>
     private void OnValidate()
     {
         sellPrices = new MarketPrices(sellPrices.wood, sellPrices.crafts);
         buyPrices = new MarketPrices(buyPrices.wood, buyPrices.crafts);
     }
 
+    /// <summary>
+    /// Decide qué objetos están disponibles en función de su precio.
+    /// En caso < 0, no hay de ese objeto disponible.
+    /// En cualquier otro caso, hay Infinito hasta que se añada cantidad concreta
+    /// </summary>
     protected void SetUpAvaliableItems()
     {
         for (int i = 0; i < buyPrices.prices.Length; ++i)
@@ -221,6 +322,10 @@ public class Market : NPCBuilding
         }
     }
 
+    /// <summary>
+    /// Procesa petición de cliente después del tiempo necesario para procesar una petición
+    /// </summary>
+    /// <param name="request"> Petición a procesar </param>
     IEnumerator ProcessRequest(Request request)
     {
         processingRequest = true;
@@ -242,7 +347,10 @@ public class Market : NPCBuilding
         base.Start();
     }
 
-
+    /// <summary>
+    /// Método al que llama el NPC atendiendo la tienda. 
+    /// Atiende las peticiones cuando puede.
+    /// </summary>
     public void Attend()
     {
         if (queue.Count > 0 && !processingRequest && npcAttendingShop)

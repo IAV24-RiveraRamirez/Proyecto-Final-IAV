@@ -2,19 +2,44 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Representa un aserradero en la simulación
+/// </summary>
 public class Sawmill : NPCBuilding
 {
     // References
+    /// <summary>
+    /// Texto que indica la madera actual dentro del aserradero
+    /// </summary>
     [SerializeField] TextMeshProUGUI woodText = null;
 
     // Parameters
+    /// <summary>
+    /// Tiempo para producir madera
+    /// </summary>
     [SerializeField] float timeToProduce = 0.5f;
+    /// <summary>
+    /// Madera producida
+    /// </summary>
     [SerializeField] int woodProduced = 3;
+    /// <summary>
+    /// Máximo de madera almacenada
+    /// </summary>
     [SerializeField] int maxWoodStored = 100;
 
     // Variables
+    /// <summary>
+    /// Progreso de producción de madera por cada NPC trabajando
+    /// </summary>
     Dictionary<NPCInfo, float> timePerWorker = new Dictionary<NPCInfo, float>();
+
+    /// <summary>
+    /// Madera actualmente almacenada
+    /// </summary>
     int currentWoodStored = 0;
+    /// <summary>
+    /// Indica si el almacén de madera está lleno
+    /// </summary>
     bool isStorageFull = false;
 
     protected override void Start()
@@ -30,6 +55,9 @@ public class Sawmill : NPCBuilding
     }
 
     // Own Methods
+    /// <summary>
+    /// Añade madera al almacenamiento
+    /// </summary>
     public void AddWood(int wood)
     {
         currentWoodStored += wood;
@@ -38,6 +66,10 @@ public class Sawmill : NPCBuilding
         UpdateText();
     }
 
+    /// <summary>
+    /// Vacía la madera del almacén
+    /// </summary>
+    /// <returns> Madera almacenada </returns>
     public int GetWoodStored() 
     {
         int returnValue = currentWoodStored;
@@ -49,6 +81,10 @@ public class Sawmill : NPCBuilding
 
     public bool IsStorageFull() { return isStorageFull; }
 
+    /// <summary>
+    /// Método que llama un NPC para trabajar en un aserradero
+    /// </summary>
+    /// <param name="info"> NPC trabajador </param>
     public void Work(NPCInfo info)
     {
         if (!timePerWorker.ContainsKey(info)) {

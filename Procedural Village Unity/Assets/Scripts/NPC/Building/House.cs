@@ -24,6 +24,7 @@ public class House : NPCBuilding
     /// </summary>
     protected override void Start()
     {
+        type = BuildingType.HOUSE;
         base.Start();
         if (numNPCsToSpawn < 0) numNPCsToSpawn = maxNpcs;
         else numNPCsToSpawn = Random.Range(1, maxNpcs);

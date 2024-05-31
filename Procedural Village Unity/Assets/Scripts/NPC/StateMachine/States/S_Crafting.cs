@@ -1,7 +1,6 @@
 public class S_Crafting : State
 {
     NPCInfo info;
-    WoodShop.CraftingProgress progress;
     WoodShop woodShop;
     public override void Enter()
     {
@@ -16,7 +15,7 @@ public class S_Crafting : State
 
     public override void Exit()
     {
-        woodShop.StopWorking(info, progress);
+
     }
 
     public override string ID()

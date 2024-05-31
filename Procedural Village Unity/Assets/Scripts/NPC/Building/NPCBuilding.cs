@@ -1,32 +1,47 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Clase base para todos los edificios de la simulación
+/// </summary>
 public class NPCBuilding : MonoBehaviour
 {
     // Enums
+    /// <summary>
+    /// Tipo de edificio
+    /// </summary>
     public enum BuildingType { HOUSE, WORK, LEISURE, MARKET }
 
     // Parameters
+    /// <summary>
+    /// Máximo de NPCs trabajando/viviendo en el edificio
+    /// </summary>
     [SerializeField] protected int maxNpcs = 4;
-    [SerializeField] protected BuildingType type = BuildingType.HOUSE;
+    /// <summary>
+    /// Tipo de edificio
+    /// </summary>
+    protected BuildingType type = BuildingType.HOUSE;
 
-    // Variables
-    protected int NpcsSettled = 0; // Number of NPCs which are assigned to this building. Does not say how many are actually inside
-    protected int NpcsInside = 0; // NPCs currently inside the building
-
+    /// <summary>
+    /// Indica si el edificio está lleno (True en caso de que el número de NPCs trabajando/viviendo dentro sea igual que maxNpcs)
+    /// </summary>
     bool full = false;
 
+    /// <summary>
+    /// Lista NPCs viviendo/trabajando aquí
+    /// </summary>
     List<NPCInfo> npcs = new List<NPCInfo>();
 
     // Getters
     public int GetMaxNPCs() { return maxNpcs; }
-    public int GetSettledNPCs() { return NpcsSettled; }
-    public int GetNPCsInside() { return NpcsInside; }
     public BuildingType GetBuildingType() { return type; }
-    public bool IsFull() { return full; }
 
     // Methods
+    /// <summary>
+    /// Añade un NPC
+    /// </summary>
+    /// <param name="npc"> NPC a añadir </param>
+    /// <returns> Si se ha llenado el edificio </returns>
     public virtual bool AddNPC(NPCInfo npc)
     {
         if (npcs.Count < maxNpcs)
@@ -39,12 +54,17 @@ public class NPCBuilding : MonoBehaviour
         return full;
     }
 
+    /// <summary>
+    /// Desactiva colisión
+    /// </summary>
     public void DeactivateCollider()
     {
         GetComponent<Collider>().enabled = false;
     }
     
-    // Start is called before the first frame update
+    /// <summary>
+    /// Añade el edificio a la simulación
+    /// </summary>
     protected virtual void Start()
     {
         SimulationManager.Instance.AddBuilding(this);
