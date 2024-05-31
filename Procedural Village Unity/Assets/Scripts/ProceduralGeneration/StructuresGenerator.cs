@@ -114,10 +114,10 @@ public class StructuresGenerator : MonoBehaviour
         int nTests = 0;
         Vector3 bestPositionFound = buildingPos;
         RaycastHit hitResult = new RaycastHit();
-        while (nTests < maxNumRayCastTests) //Hacemos todos los test aunque encontremos un sitio válido porque queremos el mejor sitio de todos los válidos encontrados
+        while (nTests < 4) //Hacemos todos los test aunque encontremos un sitio válido porque queremos el mejor sitio de todos los válidos encontrados
         {
             Vector3 o;
-            int direction = nTests % 4;
+            int direction = nTests;
             Color color = Color.white;
             if(direction <= 0)
             {
