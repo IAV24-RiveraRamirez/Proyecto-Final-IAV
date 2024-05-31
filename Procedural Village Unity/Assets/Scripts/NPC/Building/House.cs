@@ -1,40 +1,39 @@
 using UnityEngine;
 
 /// <summary>
-/// Clase encargada de añadir los NPCs a la escena y darles una zona donde dormir
+/// Clase encargada de aï¿½adir los NPCs a la escena y darles una zona donde dormir
 /// </summary>
 public class House : NPCBuilding
 {
     /// <summary>
-    /// Lugar de aparición para los NPC
+    /// Lugar de apariciï¿½n para los NPC
     /// </summary>
     [SerializeField] protected Transform spawnPoint = null;
 
     /// <summary>
-    /// Cuántos NPCs se spawnearán
+    /// Cuï¿½ntos NPCs se spawnearï¿½n
     /// </summary>
-    [SerializeField] int numNPCsToSpawn = -1;
+    int numNPCsToSpawn = -1;
 
     public void SetNPCsToSpawn(int num) {  numNPCsToSpawn = num; }
 
-    public int GetNPCsToSpawn() { return numNPCsToSpawn; }
+    public int GetNPCsToSpawn() { numNPCsToSpawn = Random.Range(1, maxNpcs); return numNPCsToSpawn; }
 
     /// <summary>
-    /// Inicializa el edificio y escoge un número aleatorio de NPCs a añadir a escena
+    /// Inicializa el edificio y escoge un nï¿½mero aleatorio de NPCs a aï¿½adir a escena
     /// </summary>
     protected override void Start()
     {
         type = BuildingType.HOUSE;
         base.Start();
-        if (numNPCsToSpawn < 0) numNPCsToSpawn = maxNpcs;
-        else numNPCsToSpawn = Random.Range(1, maxNpcs);
+        if(numNPCsToSpawn <= 0) numNPCsToSpawn = Random.Range(1, maxNpcs);
 
         if (!spawnPoint) { spawnPoint = transform.GetChild(0).transform; }
         if (!spawnPoint) { Debug.LogError("'Spawnpoint' GameObject missing as child of House prefab"); }
     }
 
     /// <summary>
-    /// Método que instancia NPCs en escena. Se encarga conseguir un lugar de trabajo y de mercado para estos.
+    /// Mï¿½todo que instancia NPCs en escena. Se encarga conseguir un lugar de trabajo y de mercado para estos.
     /// </summary>
     public void SpawnNPCs()
     {
