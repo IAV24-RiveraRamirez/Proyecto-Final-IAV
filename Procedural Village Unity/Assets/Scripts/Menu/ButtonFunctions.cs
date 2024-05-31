@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LoadScene : MonoBehaviour
+public class ButtonFunctions : MonoBehaviour
 {
     public void LoadLevel(int index)
     {
@@ -18,5 +18,16 @@ public class LoadScene : MonoBehaviour
         {
             yield return null;
         }
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void ReturnToMenu(int index)
+    {
+        Destroy(GameObject.Find("SettingsManager"));
+        SceneManager.LoadScene(index);
     }
 }

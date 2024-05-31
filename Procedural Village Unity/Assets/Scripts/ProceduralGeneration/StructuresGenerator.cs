@@ -37,6 +37,7 @@ public class StructuresGenerator : MonoBehaviour
                 maxTreeSpawnHeight = settingsManager.maxTreeHeightSpawn;
                 treeGenerationInterval = settingsManager.treeSpawnInterval;
                 minTreeValueGenerator = settingsManager.treeSpawnMinValue;
+                maxHouseAngle = settingsManager.maxHouseAngle;
             }
             
         }
