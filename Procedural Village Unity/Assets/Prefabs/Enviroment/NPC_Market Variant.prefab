@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1143621312677711657, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7b3b3edadcd2c4a439d067155035f524, type: 2}
     - target: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
       propertyPath: m_Name
       value: NPC_Market Variant

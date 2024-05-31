@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.4487133, g: 0.49877006, b: 0.57568336, a: 1}
+  m_IndirectSpecularColor: {r: 0.44871324, g: 0.49876982, b: 0.57568324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -224,9 +224,16 @@ MonoBehaviour:
   spawnWater: 0
   randomizeOffset: 1
   water: {fileID: 8175967659044370911, guid: d8630c95f9a48b845b7ff9c7131edb50, type: 3}
-  residentialBuilding: {fileID: 3567311589662379801, guid: 959d806d21bcaf14c9dacb3cb4808aff, type: 3}
-  workBuilding: {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
-  leisureBuilding: {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+  residentialBuildings:
+  - {fileID: 3567311589662379801, guid: 959d806d21bcaf14c9dacb3cb4808aff, type: 3}
+  workBuildings:
+  - {fileID: 2018873329447505036, guid: cce7775e4918fa74986689a485c4da32, type: 3}
+  leisureBuildings:
+  - {fileID: 1668946244271841132, guid: 5db867bc71d22b942bad3018e1bb3558, type: 3}
+  - {fileID: 5997440145109484584, guid: c819613759b136546b26accbbacfaa0d, type: 3}
+  market: {fileID: 2008171895715748610, guid: 435d2c3be9901c64cb4e926982ca6876, type: 3}
+  woodShop: {fileID: 9090106151552626361, guid: 55da384955103b44c8b12827fa122662, type: 3}
+  sawMill: {fileID: 5473654228370142030, guid: 456a39a99a318b846a9515c0b0f1c5d1, type: 3}
   regionsParameters:
   - Name: Sand
     Height: 0.05
@@ -344,14 +351,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 883ab7c268726424b8ae6379cbb543b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_NUM_TEST: 400
-  MAX_HOUSE_ANGLE_TOLERANCE: 15
-  MAX_HOUSE_HEIGHT_DIFF_TOLERANCE: 3
-  MAX_VILLAGE_SEPARATION: 20
-  MAX_TREE_HEIGHT: 10
-  MAX_TREE_ANGLE_TOLERANCE: 30
-  TREE_GENERATION_INTERVAL: 2.5
-  MIN_TREE_VALUE_GENERATOR: 0.6
+  maxNumRayCastTests: 300
+  maxHouseAngle: 15
+  maxHouseHeightDifference: 3
+  maxVillageSeparation: -1
+  maxTreeSpawnHeight: 10
+  maxTreeAngle: 30
+  treeGenerationInterval: 2.5
+  minTreeValueGenerator: 0.6
 --- !u!1 &535168691
 GameObject:
   m_ObjectHideFlags: 0
