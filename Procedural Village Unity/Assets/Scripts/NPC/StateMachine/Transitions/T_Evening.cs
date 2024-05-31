@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica que ha llegado la noche
+/// </summary>
 public class T_Evening : Transition
 {
     public T_Evening(State nextState) : base(nextState)

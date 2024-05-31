@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estados para un mercader de mañana, que compra recursos a los clientes
+/// </summary>
 public class SM_MerchantBuyer : SM_Work
 {
     public override string ID()

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Dormir. Rota al NPC
+/// </summary>
 public class S_OnBed : State
 {
     public override void Enter()

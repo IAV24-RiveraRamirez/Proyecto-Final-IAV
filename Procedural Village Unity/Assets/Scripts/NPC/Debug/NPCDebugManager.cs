@@ -25,6 +25,9 @@ public class NPCDebugManager : MonoBehaviour
         if(!shownInfo) { shownInfo = GetComponentInChildren<TextMeshProUGUI>(); }
     }
 
+    /// <summary>
+    /// Nuevo texto a mostrar y quién quiere mostrarlo
+    /// </summary>
     public void SetInfo(string gO, string text)
     {
         lastNPCShowingInfo = gO;
@@ -34,6 +37,9 @@ public class NPCDebugManager : MonoBehaviour
             Debug.LogError("Text not found.");
     }
 
+    /// <summary>
+    /// Actualiza el texto actual si el objeto que quiere actualizar es el que está mostrando actualmente su información
+    /// </summary>
     public void UpdateInfo(string gO, string text)
     {
         if (shownInfo)
@@ -43,6 +49,9 @@ public class NPCDebugManager : MonoBehaviour
         else Debug.LogError("Text not found.");
     }
 
+    /// <summary>
+    /// Esconde el texto actual si el objeto que quiere actualizar es el que está mostrando actualmente su información
+    /// </summary>
     public void HideInfo(string gO)
     {
         if(lastNPCShowingInfo == gO) {

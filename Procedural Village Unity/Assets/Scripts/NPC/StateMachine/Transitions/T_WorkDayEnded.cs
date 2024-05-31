@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica que el día de trabajo se ha acabado abruptamente
+/// </summary>
 public class T_WorkDayEnded : Transition
 {
     public T_WorkDayEnded(State nextState) : base(nextState)

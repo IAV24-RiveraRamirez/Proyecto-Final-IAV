@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Le da a un NPC como destino su lugar de ocio seleccionado
+/// </summary>
 public class S_ToLeisurePlace : State
 {
     NavMeshAgent agent;

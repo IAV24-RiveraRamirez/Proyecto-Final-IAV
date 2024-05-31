@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.IO.IsolatedStorage;
-using UnityEngine;
 
+/// <summary>
+/// Indica cuándo ha llegado el momento de trabajar
+/// </summary>
 public class T_HasToWork : Transition
 {
     NPCInfo info;

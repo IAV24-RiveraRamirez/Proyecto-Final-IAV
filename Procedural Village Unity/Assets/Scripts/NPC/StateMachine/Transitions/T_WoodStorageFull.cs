@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se ha llenado el almacén de madera de un aserradero
+/// </summary>
 public class T_WoodStorageFull : Transition
 {
     // References 

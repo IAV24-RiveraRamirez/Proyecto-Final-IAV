@@ -1,3 +1,7 @@
+
+/// <summary>
+/// Indica cuándo se encuentra cerrado un mercado
+/// </summary>
 public class T_MarketClosed : Transition
 {
     protected NPCInfo info;

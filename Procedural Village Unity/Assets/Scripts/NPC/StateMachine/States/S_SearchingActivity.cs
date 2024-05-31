@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Busca una actividad aleatoria que hacer en tiempo de ocio
+/// </summary>
 public class S_SearchingActivity : State
 {
     NPCInfo info;

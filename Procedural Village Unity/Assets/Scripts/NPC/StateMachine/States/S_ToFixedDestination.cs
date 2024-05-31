@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Viaja hasta un lugar concreto del mapa ya conocido de antes
+/// </summary>
 public class S_ToFixedDestination : State
 {
     NavMeshAgent agent;

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estado de un carpintero que debe vender sus trabajos de artesanía en su tienda de tarde
+/// </summary>
 public class SM_SellCrafts : StateMachine
 {
     public override string ID()
@@ -17,6 +20,8 @@ public class SM_SellCrafts : StateMachine
 
         NPCInfo info = g.GetComponent<NPCInfo>();
         Market market = info.GetWorkPlace() as Market;
+
+        // En caso de que tenga que vender, se pone su horario de trabajo por la tarde y se añaden los items necesarios a la tienda
         if(sell != null && (bool)sell)
         {
             info.SetWorkingPeriod(SimulationManager.TimePeriods.AFTERNOON);

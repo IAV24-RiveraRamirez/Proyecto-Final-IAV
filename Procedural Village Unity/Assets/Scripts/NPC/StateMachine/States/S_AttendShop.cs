@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Atienda la tienda que tiene asignado el NPC como lugar de trabajo
+/// </summary>
 public class S_AttendShop : State
 {
     Market market = null;

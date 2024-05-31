@@ -1,3 +1,6 @@
+/// <summary>
+/// Un carpintero trabaja en su carpintería
+/// </summary>
 public class S_Crafting : State
 {
     NPCInfo info;

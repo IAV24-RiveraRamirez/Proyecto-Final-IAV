@@ -1,3 +1,6 @@
+/// <summary>
+/// Trabajo en un aserradero
+/// </summary>
 public class S_ChoppingWood : State
 {
     NPCInfo info = null;

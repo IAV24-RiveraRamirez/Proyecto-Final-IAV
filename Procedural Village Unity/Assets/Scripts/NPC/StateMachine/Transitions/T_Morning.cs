@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica cuándo es por la mañana
+/// </summary>
 public class T_Morning : Transition
 {
     public T_Morning(State nextState) : base(nextState)

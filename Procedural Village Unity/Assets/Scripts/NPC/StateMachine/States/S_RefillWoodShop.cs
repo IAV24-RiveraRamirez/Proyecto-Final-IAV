@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Rellena la carpintería con la madera que tiene encima el carpintero
+/// </summary>
 public class S_RefillWoodShop : State
 {
     public override void Enter()

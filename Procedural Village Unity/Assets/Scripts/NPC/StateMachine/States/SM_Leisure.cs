@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estado para un NPC en momento de Ocio
+/// </summary>
 public class SM_Leisure : StateMachine
 {
     public override string ID()
@@ -10,6 +13,12 @@ public class SM_Leisure : StateMachine
     public override void Init(GameObject g, StateMachine fsm)
     {
         base.Init(g, fsm);
+
+        // Busca una actividad.
+        // En caso de que sea de mercado, va al mercado, hace una petición y, da igual su output, 
+        // vuelve a buscar una actividad
+        // En caso de que sea una actividad corriente, va al sitio designado y trata de realizarla. 
+        // Al acabarla, vuelve a buscar actividad
 
         State state1 = new S_SearchingActivity();
         State toMarket = new S_ToLeisurePlace();

@@ -26,6 +26,10 @@ public class NPCDebugInfoGatherer : MonoBehaviour
         } 
     }
 
+    /// <summary>
+    /// Manda la información del NPC apuntado al texto mostrado en pantalla
+    /// </summary>
+    /// <param name="update"> Decide si debe actualizarse el texto actual </param>
     public void SendInfo(bool update = false)
     {
         if(!npcSM) { Debug.LogError("NPC State Machine is missing on: " + gameObject.name + " GameObject."); return; }
@@ -57,6 +61,9 @@ public class NPCDebugInfoGatherer : MonoBehaviour
         else NPCDebugManager.Instance.UpdateInfo(gameObject.name, debugInfo);
     }
 
+    /// <summary>
+    /// Quita la información del NPC que se estaba mostrando
+    /// </summary>
     public void HideInfo()
     {
         debugInfo = "";

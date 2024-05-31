@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica cuándo ha llegado el tiempo de ocio
+/// </summary>
 public class T_LeisureTimeArrived : Transition
 {
     NPCInfo info;

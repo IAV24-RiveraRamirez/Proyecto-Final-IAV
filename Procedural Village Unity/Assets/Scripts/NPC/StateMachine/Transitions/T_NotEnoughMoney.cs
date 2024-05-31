@@ -1,3 +1,7 @@
+
+/// <summary>
+/// Indica cuándo no se ha tenido suficiente dinero para comprar algo 
+/// </summary>
 public class T_NotEnoughMoney : Transition
 {
     protected NPCInfo info;

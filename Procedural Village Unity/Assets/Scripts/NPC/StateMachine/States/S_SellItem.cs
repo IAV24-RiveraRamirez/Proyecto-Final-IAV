@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Un NPC intenta vender un Item a un mercader
+/// Solo lo consigue si ve aumentado su dinero durante este estado
+/// </summary>
 public class S_SellItem : State
 {
     float lastMoney = 0;

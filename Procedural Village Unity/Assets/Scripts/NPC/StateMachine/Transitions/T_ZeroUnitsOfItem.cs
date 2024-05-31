@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se tienen exactamente 0 unidades de un Item
+/// </summary>
 public class T_ZeroUnitsOfItem : Transition
 {
     string itemNameOnBlackboard;

@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica que ha llegado la tarde
+/// </summary>
 public class T_Afternoon : Transition
 {
     public T_Afternoon(State nextState) : base(nextState)

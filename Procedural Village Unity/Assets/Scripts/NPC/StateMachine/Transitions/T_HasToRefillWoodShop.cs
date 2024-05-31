@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica que un carpintero debe rellenar el almacén de su carpintería
+/// </summary>
 public class T_HasToRefillWoodShop : Transition
 {
     public T_HasToRefillWoodShop(State nextState) : base(nextState)

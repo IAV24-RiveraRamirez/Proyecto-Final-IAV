@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo un carpintero no ha tenido suficiente dinero para comprar madera
+/// </summary>
 public class T_NotEnoughMoneyToBuyForWoodShop : T_NotEnoughMoney
 {
     public T_NotEnoughMoneyToBuyForWoodShop(State nextState) : base(nextState)

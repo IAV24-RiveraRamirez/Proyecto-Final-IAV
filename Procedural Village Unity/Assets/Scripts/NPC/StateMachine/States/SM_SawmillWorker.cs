@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estado para un trabajor de aserradero
+/// </summary>
 public class SM_SawmillWorker : SM_Work
 {
     public override string ID()
@@ -14,6 +17,8 @@ public class SM_SawmillWorker : SM_Work
         NPCInfo info = gameObject.GetComponent<NPCInfo>();
         info.SetWorkingPeriod(SimulationManager.TimePeriods.MORNING);
 
+        // Viaja hasta al aserradero y trabaja. Cuando ve que su almacén está lleno,
+        // debe venderla y volver al trabajo
         State state1 = new S_ToFixedDestination(info.GetWorkPlace().gameObject);
         State state2 = new S_ChoppingWood();
         State state3 = new S_ToFixedDestination(info.GetMarketPlace().gameObject);

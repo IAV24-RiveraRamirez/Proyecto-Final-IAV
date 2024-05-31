@@ -1,3 +1,6 @@
+/// <summary>
+/// Realiza una actividad en un lugar de ocio genérico
+/// </summary>
 public class S_HaveFun : State
 {
     LeisurePlace place;

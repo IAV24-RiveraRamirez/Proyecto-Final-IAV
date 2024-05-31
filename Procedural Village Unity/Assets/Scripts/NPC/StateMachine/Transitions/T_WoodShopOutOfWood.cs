@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se ha quedado sin madera una carpintería
+/// </summary>
 public class T_WoodShopOutOfWood : Transition
 {
     public T_WoodShopOutOfWood(State nextState) : base(nextState)

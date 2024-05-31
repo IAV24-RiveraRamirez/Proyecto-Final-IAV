@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo una carpintería tiene madera disponible
+/// </summary>
 public class T_WoodShopRefilled : Transition
 {
     WoodShop shop;

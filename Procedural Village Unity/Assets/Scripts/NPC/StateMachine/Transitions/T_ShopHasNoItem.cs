@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica que la tienda donde se ha intentado comprar no tiene ese ítem disponible
+/// </summary>
 public class T_ShopHasNoItem : Transition
 {
     NPCInfo info;

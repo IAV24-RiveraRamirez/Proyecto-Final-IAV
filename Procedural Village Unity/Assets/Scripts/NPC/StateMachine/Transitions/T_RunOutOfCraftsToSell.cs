@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se han acabado los trabajos de artesanía disponibles para vender
+/// </summary>
 public class T_RunOutOfCraftsToSell : Transition
 {
     Market market;

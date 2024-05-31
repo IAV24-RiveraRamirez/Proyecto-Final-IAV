@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Indica cuándo se ha llegado a un destino dado un margen
+/// </summary>
 public class T_ReachDestination : Transition
 {
     // References

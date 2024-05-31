@@ -1,9 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Trata de comprar un Item a un mercader
+/// Solo lo consigue si ve su dinero disminuido
+/// </summary>
 public class S_BuyItem : State
 {
     public const string GET_RANDOM_AMOUNT = "GetRandomAmountFromShop";

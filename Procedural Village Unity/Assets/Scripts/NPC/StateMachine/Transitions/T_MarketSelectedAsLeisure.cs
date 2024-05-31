@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se ha encontrado un mercado como actividad de ocio
+/// </summary>
 public class T_MarketSelectedAsLeisure : Transition
 {
     NPCInfo info;

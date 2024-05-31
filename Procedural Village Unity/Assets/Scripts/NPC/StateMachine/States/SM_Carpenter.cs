@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estado para un carpintero
+/// </summary>
 public class SM_Carpenter : SM_Work
 {
     public override string ID()
@@ -16,6 +19,12 @@ public class SM_Carpenter : SM_Work
         NPCInfo info = g.GetComponent<NPCInfo>();
         if (sell == null || !(bool)sell)
             info.SetWorkingPeriod(SimulationManager.TimePeriods.MORNING);
+
+        // Va a su carpintería a trabajar hasta que se quede sin materiales.
+        // Trata de comprar madera
+        // En caso de que no pueda, monta su tienda por la tarde para vender sus trabajos de artesanía
+        // Cuando vende todos sus trabajos, vuelve al primer paso
+        // En caso de que pueda, vuelve a su carpintería, la rellena y comienza a trabajar de nuevo
 
         State state1 = new S_ToFixedDestination(info.GetWorkPlace().gameObject);
         State state2 = new S_Crafting();

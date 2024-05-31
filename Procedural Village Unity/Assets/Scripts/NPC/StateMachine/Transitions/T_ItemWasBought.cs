@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se ha podido comprar un ítem de una tienda
+/// </summary>
 public class T_ItemWasBought : Transition
 {
     NPCInfo info;

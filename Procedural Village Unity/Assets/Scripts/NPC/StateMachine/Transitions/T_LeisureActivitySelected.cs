@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica cuándo se ha seleccionado una actividad de ocio
+/// </summary>
 public class T_LeisureActivitySelected : Transition
 {
     NPCInfo info;

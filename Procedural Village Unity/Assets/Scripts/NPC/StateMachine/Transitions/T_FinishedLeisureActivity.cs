@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+/// <summary>
+/// Indica que se ha terminado una actividad de ocio
+/// </summary>
 public class T_FinishedLeisureActivity : Transition
 {
     NPCInfo info;

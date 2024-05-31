@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Máquina de estados para Dormir
+/// </summary>
 public class SM_Sleep : StateMachine
 {
     public override void Init(GameObject g, StateMachine fsm)
@@ -9,6 +12,8 @@ public class SM_Sleep : StateMachine
         base.Init(g, fsm);
 
         NPCInfo info = gameObject.GetComponent<NPCInfo>();
+
+        // Viajar hasta cama y dormir
         State state1 = new S_ToFixedDestination(info.GetHouse().gameObject);
         State state2 = new S_OnBed();
 
