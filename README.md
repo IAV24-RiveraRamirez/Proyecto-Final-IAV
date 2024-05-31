@@ -16,6 +16,21 @@ La práctica se hará entre dos integrantes y consiste en programar un sistema d
 
 Cada alumno se centrará en uno de los dos pilares fundamentales de la práctica: generación aleatoria de la aldea y programación de la máquina de estados jerárquica y rutinas de los _PNJ_.
 
+## Explicaciones sobre los parámetros del proyecto
+- Toggle water: permite activar o desactivar la generación de agua en el mapa. Las casas no podrán generarse en lugares con agua y los NPC no pueden moverse por encima. Activar esta opción puede provocar que algunos parámetros de la generación no se cumplan pues complica la generación.
+- Random Perlin noise: si se activa se generarán unos offsets aleatorios que darán como resultado un ruido de Perlin diferente en cada ejecución.
+- Octaves number: el número de octavas que usará el algoritmo para generar el ruido de Perlin.
+- Terrain depth: ajusta la altura del terreno. Cuanto mayor sea el valor mayores serán las alturas del relieve generado.
+- Perlin scale: determina la escala del ruido de Perlin.
+- Houses to spawn: el número máximo de casas que se intentarán generar.
+- Max village separation: el la separación máxima que puede haber entre una casa que se vaya a generar y el centro de la aldea, no se pueden generar casas a una distancia mayor que la indicada en este valor.
+- Max height between houses: la máxima diferencia de altura que puede haber entre dos casas. No se pueden generar casas cuya diferencia de altura con respecto a la primera casa generada supere este valor.
+- Max house spawn angle: el ángulo máximo que puede tener la pendiente del terreno en un punto dado para que se pueda generar una casa en ese punto.
+- Trees max height spawn: altura máxima a la que se pueden generar árboles.
+- Tree spawn interval: intervalo de generación de árboles, cuanto menor sea este valor más comprobaciones de generación de árboles se harán.
+- Min tree spawn value: los árboles se generan siguiendo otro mapa de ruido de Perlin diferente al del terreno. Con este valor se indica el valor mínimo que tiene que tener un punto en dicho mapa para que se pueda generar un árbol en esas coordenadas.
+- 
+
 ## Planteamiento del problema
 
 El trabajo se ha dividido de la siguiente manera:
@@ -290,9 +305,10 @@ Asumiendo que cada punto equivale a 30 minutos:
 
 | Estado | Tarea                                        | Puntos estimados | Puntos finales |   Fecha    |
 | :----: | :------------------------------------------- | :--------------: | :------------: | :--------: |
-|   -    | Generación de terreno mediante Ruido Perlin  |        20        |       -        | ---------- |
-|   -    | Colocación de Aldea en terreno               |        30        |       -        | ---------- |
-|   -    | Comportamiento básico de NPCs                |        33        |       -        | ---------- |
+|  Done  | Generación de terreno mediante Ruido Perlin  |        20        |       17       | 25/05/24   |
+|  Done  | Colocación de Aldea en terreno               |        30        |       40       | 30/05/24   |
+|  Done  | Comportamiento básico de NPCs                |        33        |       30       | 26/05/24   |
+|  Done  | Ampliación de trabajos de NPCs               |        22        |       19       | 30/05/24   |
 
 [Link](https://github.com/orgs/IAV24-RiveraRamirez/projects/1/views/1) al proyecto de GitHub con información más detallada y ampliada
 
@@ -316,7 +332,7 @@ Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo 
 
 ## Conclusiones
 
-
+Se puede probar la práctica descargándose los archivos del apartado de "Releases" y lanzando el ejecutable. Todo lo propuesto ha sido llevado a cabo. Además se ha añadido contenido adicional (ver apartado de ampliaciones) y se han hecho los cambios sugeridos durante la revisión del proyecto online del día 28/05/2023. Todos los apartados de la práctica funcionan correctamente, aunque debido a la aleatoriedad del terreno pueden generarse casos en los que la aldea no cumpla todas características especificadas.
 
 ## Documental con las pruebas y características
 
@@ -324,7 +340,9 @@ Para poner a prueba la práctica y demostrar el correcto funcionamiento de todo 
 
 ## Licencia
 
+Miguel Ramírez Castrillo y David Rivera Martínez, autores de la documentación, código y recursos de este trabajo, concedemos permiso permanente a los profesores de la Facultad de Informática de la Universidad Complutense de Madrid para utilizar nuestro material, con sus comentarios y evaluaciones, con fines educativos o de investigación; ya sea para obtener datos agregados de forma anónima como para utilizarlo total o parcialmente reconociendo expresamente nuestra autoría.
 
+Una vez superada con éxito la asignatura se prevee publicar todo en abierto (la documentación con licencia Creative Commons Attribution 4.0 International (CC BY 4.0) y el código con licencia GNU Lesser General Public License 3.0).
 
 ## Referencias
 
